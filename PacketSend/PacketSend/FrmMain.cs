@@ -178,7 +178,7 @@ namespace PacketSend
 
         private void btnLoadFile_Click(object sender, EventArgs e)
         {
-            int file_number = GetLoadButtonFileNumber(sender);
+            int file_number = GetFileNumber(sender);
 
             if (file_number == -1) return;
 
@@ -194,8 +194,30 @@ namespace PacketSend
 
         }
 
-        private int GetLoadButtonFileNumber(object sender)
+        private int GetFileNumber(object sender)
         {
+
+            if(sender is TextBox)
+            {
+                TextBox tb_clicked = (TextBox)sender;
+
+                switch (tb_clicked.Name)
+                {
+                    case "tbFile1":
+                        return 0;
+                    case "tbFile2":
+                        return 1;
+                    case "tbFile3":
+                        return 2;
+                    case "tbFile4":
+                        return 3;
+                    case "tbFile5":
+                        return 4;
+                    case "tbFile6":
+                        return 5;
+                }
+            }
+
             if (sender is Button)
             {
                 Button btn_clicked = (Button)sender;
@@ -308,7 +330,7 @@ namespace PacketSend
 
         private void btnRunFile_Click(object sender, EventArgs e)
         {
-            int file_number = GetLoadButtonFileNumber(sender);
+            int file_number = GetFileNumber(sender);
 
             if (file_number == -1) return;
 
@@ -520,6 +542,42 @@ namespace PacketSend
             Properties.Settings.Default.CurrentConfigFile = "";
             lbCurrentConfigFile.Text = Properties.Settings.Default.CurrentConfigFile;
 
+        }
+
+        private void tbFile_Click(object sender, EventArgs e)
+        {
+            int file_number = GetFileNumber(sender);
+
+            if (file_number == -1) return;
+
+            if (WiresharkFiles[file_number] == null) return;
+
+            tbFileInfoFilename.Text = WiresharkFiles[file_number].FileName;
+            tbFileInfoSize.Text = WiresharkFiles[file_number].FileSizeKB.ToString() + "KB";
+            tbFileInfoCreated.Text = WiresharkFiles[file_number].FileCreatedOn;
+            tbFileInfoNumberOfPackets.Text = WiresharkFiles[file_number].PacketCount + " (SIP: " + WiresharkFiles[file_number].SIP_Packets + "  ::  RTP: " + WiresharkFiles[file_number].RTP_Packets + ")";
+
+
+            if(rbOriginal.Checked)
+            {
+                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime(WiresharkFiles[file_number].FileEstTime);
+            }
+            else if(rb100.Checked)
+            {
+                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[file_number].PacketCount * 100) / 1000000.0f);
+            }
+            else if (rb250.Checked)
+            {
+                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[file_number].PacketCount * 250) / 1000000.0f);
+            }
+            else if (rb500.Checked)
+            {
+                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[file_number].PacketCount * 500) / 1000000.0f);
+            }
+            else if (rb1000.Checked)
+            {
+                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[file_number].PacketCount * 1000) / 1000000.0f);
+            }
         }
     }
 }

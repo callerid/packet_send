@@ -55,7 +55,6 @@
             this.ckbNext4 = new System.Windows.Forms.CheckBox();
             this.ckbNext5 = new System.Windows.Forms.CheckBox();
             this.ckbNext6 = new System.Windows.Forms.CheckBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -93,6 +92,17 @@
             this.btnClearConsole = new System.Windows.Forms.Button();
             this.btnNewConfig = new System.Windows.Forms.Button();
             this.btnRunSequence = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbFileInfoFilename = new System.Windows.Forms.TextBox();
+            this.tbFileInfoSize = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.tbFileInfoCreated = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.tbFileInfoNumberOfPackets = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.tbFileInfoEstTime = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -277,6 +287,7 @@
             this.tbFile1.ReadOnly = true;
             this.tbFile1.Size = new System.Drawing.Size(330, 20);
             this.tbFile1.TabIndex = 18;
+            this.tbFile1.Click += new System.EventHandler(this.tbFile_Click);
             // 
             // tbPacketCount1
             // 
@@ -357,20 +368,10 @@
             this.ckbNext6.UseVisualStyleBackColor = true;
             this.ckbNext6.Click += new System.EventHandler(this.ChangesMade);
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 117);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(68, 13);
-            this.label4.TabIndex = 45;
-            this.label4.Text = "Time Interval";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(115, 117);
+            this.label5.Location = new System.Drawing.Point(88, 115);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(42, 13);
             this.label5.TabIndex = 46;
@@ -380,7 +381,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(163, 117);
+            this.label6.Location = new System.Drawing.Point(136, 115);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(29, 13);
             this.label6.TabIndex = 47;
@@ -390,7 +391,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(198, 117);
+            this.label7.Location = new System.Drawing.Point(171, 115);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(25, 13);
             this.label7.TabIndex = 48;
@@ -400,7 +401,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(229, 117);
+            this.label8.Location = new System.Drawing.Point(202, 115);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(25, 13);
             this.label8.TabIndex = 49;
@@ -410,7 +411,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(260, 117);
+            this.label9.Location = new System.Drawing.Point(233, 115);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(25, 13);
             this.label9.TabIndex = 50;
@@ -420,7 +421,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(291, 117);
+            this.label10.Location = new System.Drawing.Point(264, 115);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(31, 13);
             this.label10.TabIndex = 51;
@@ -430,11 +431,11 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(222, 93);
+            this.label11.Location = new System.Drawing.Point(119, 94);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(78, 13);
+            this.label11.Size = new System.Drawing.Size(153, 13);
             this.label11.TabIndex = 52;
-            this.label11.Text = "Micro Seconds";
+            this.label11.Text = "Time Interval in Micro Seconds";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnLoadConfig
@@ -471,11 +472,11 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(355, 9);
+            this.label12.Location = new System.Drawing.Point(403, 18);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(271, 58);
+            this.label12.Size = new System.Drawing.Size(447, 29);
             this.label12.TabIndex = 62;
-            this.label12.Text = "Wireshark Compatible\r\nFile Generator";
+            this.label12.Text = "Wireshark Compatible File Generator";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label13
@@ -526,6 +527,7 @@
             this.tbFile2.ReadOnly = true;
             this.tbFile2.Size = new System.Drawing.Size(330, 20);
             this.tbFile2.TabIndex = 67;
+            this.tbFile2.Click += new System.EventHandler(this.tbFile_Click);
             // 
             // tbFile3
             // 
@@ -534,6 +536,7 @@
             this.tbFile3.ReadOnly = true;
             this.tbFile3.Size = new System.Drawing.Size(330, 20);
             this.tbFile3.TabIndex = 68;
+            this.tbFile3.Click += new System.EventHandler(this.tbFile_Click);
             // 
             // tbFile4
             // 
@@ -542,6 +545,7 @@
             this.tbFile4.ReadOnly = true;
             this.tbFile4.Size = new System.Drawing.Size(330, 20);
             this.tbFile4.TabIndex = 69;
+            this.tbFile4.Click += new System.EventHandler(this.tbFile_Click);
             // 
             // tbFile5
             // 
@@ -550,6 +554,7 @@
             this.tbFile5.ReadOnly = true;
             this.tbFile5.Size = new System.Drawing.Size(330, 20);
             this.tbFile5.TabIndex = 70;
+            this.tbFile5.Click += new System.EventHandler(this.tbFile_Click);
             // 
             // tbFile6
             // 
@@ -558,6 +563,7 @@
             this.tbFile6.ReadOnly = true;
             this.tbFile6.Size = new System.Drawing.Size(330, 20);
             this.tbFile6.TabIndex = 71;
+            this.tbFile6.Click += new System.EventHandler(this.tbFile_Click);
             // 
             // tbPacketCount2
             // 
@@ -612,7 +618,7 @@
             this.panel1.Controls.Add(this.rb100);
             this.panel1.Controls.Add(this.rbZero);
             this.panel1.Controls.Add(this.rbOriginal);
-            this.panel1.Location = new System.Drawing.Point(103, 139);
+            this.panel1.Location = new System.Drawing.Point(76, 137);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(235, 26);
             this.panel1.TabIndex = 77;
@@ -684,7 +690,7 @@
             this.rtbConsole.Location = new System.Drawing.Point(625, 93);
             this.rtbConsole.Name = "rtbConsole";
             this.rtbConsole.ReadOnly = true;
-            this.rtbConsole.Size = new System.Drawing.Size(430, 505);
+            this.rtbConsole.Size = new System.Drawing.Size(430, 429);
             this.rtbConsole.TabIndex = 78;
             this.rtbConsole.Text = "";
             // 
@@ -729,11 +735,123 @@
             this.btnRunSequence.UseVisualStyleBackColor = true;
             this.btnRunSequence.Click += new System.EventHandler(this.btnRunSequence_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(12, 377);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(148, 13);
+            this.label2.TabIndex = 83;
+            this.label2.Text = "Selected File Information";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(37, 401);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(52, 13);
+            this.label3.TabIndex = 84;
+            this.label3.Text = "Filename:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tbFileInfoFilename
+            // 
+            this.tbFileInfoFilename.Location = new System.Drawing.Point(114, 398);
+            this.tbFileInfoFilename.Name = "tbFileInfoFilename";
+            this.tbFileInfoFilename.ReadOnly = true;
+            this.tbFileInfoFilename.Size = new System.Drawing.Size(387, 20);
+            this.tbFileInfoFilename.TabIndex = 85;
+            // 
+            // tbFileInfoSize
+            // 
+            this.tbFileInfoSize.Location = new System.Drawing.Point(114, 424);
+            this.tbFileInfoSize.Name = "tbFileInfoSize";
+            this.tbFileInfoSize.ReadOnly = true;
+            this.tbFileInfoSize.Size = new System.Drawing.Size(387, 20);
+            this.tbFileInfoSize.TabIndex = 87;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(37, 427);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(30, 13);
+            this.label14.TabIndex = 86;
+            this.label14.Text = "Size:";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tbFileInfoCreated
+            // 
+            this.tbFileInfoCreated.Location = new System.Drawing.Point(114, 450);
+            this.tbFileInfoCreated.Name = "tbFileInfoCreated";
+            this.tbFileInfoCreated.ReadOnly = true;
+            this.tbFileInfoCreated.Size = new System.Drawing.Size(387, 20);
+            this.tbFileInfoCreated.TabIndex = 89;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(37, 453);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(47, 13);
+            this.label17.TabIndex = 88;
+            this.label17.Text = "Created:";
+            this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tbFileInfoNumberOfPackets
+            // 
+            this.tbFileInfoNumberOfPackets.Location = new System.Drawing.Point(114, 476);
+            this.tbFileInfoNumberOfPackets.Name = "tbFileInfoNumberOfPackets";
+            this.tbFileInfoNumberOfPackets.ReadOnly = true;
+            this.tbFileInfoNumberOfPackets.Size = new System.Drawing.Size(387, 20);
+            this.tbFileInfoNumberOfPackets.TabIndex = 91;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(37, 479);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(71, 13);
+            this.label18.TabIndex = 90;
+            this.label18.Text = "# of Packets:";
+            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tbFileInfoEstTime
+            // 
+            this.tbFileInfoEstTime.Location = new System.Drawing.Point(114, 502);
+            this.tbFileInfoEstTime.Name = "tbFileInfoEstTime";
+            this.tbFileInfoEstTime.ReadOnly = true;
+            this.tbFileInfoEstTime.Size = new System.Drawing.Size(387, 20);
+            this.tbFileInfoEstTime.TabIndex = 93;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(37, 505);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(54, 13);
+            this.label19.TabIndex = 92;
+            this.label19.Text = "Est. Time:";
+            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1067, 610);
+            this.ClientSize = new System.Drawing.Size(1067, 542);
+            this.Controls.Add(this.tbFileInfoEstTime);
+            this.Controls.Add(this.label19);
+            this.Controls.Add(this.tbFileInfoNumberOfPackets);
+            this.Controls.Add(this.label18);
+            this.Controls.Add(this.tbFileInfoCreated);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.tbFileInfoSize);
+            this.Controls.Add(this.label14);
+            this.Controls.Add(this.tbFileInfoFilename);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.btnRunSequence);
             this.Controls.Add(this.btnNewConfig);
             this.Controls.Add(this.btnClearConsole);
@@ -765,7 +883,6 @@
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.ckbNext6);
             this.Controls.Add(this.ckbNext5);
             this.Controls.Add(this.ckbNext4);
@@ -833,7 +950,6 @@
         private System.Windows.Forms.CheckBox ckbNext4;
         private System.Windows.Forms.CheckBox ckbNext5;
         private System.Windows.Forms.CheckBox ckbNext6;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
@@ -871,6 +987,17 @@
         private System.Windows.Forms.Button btnClearConsole;
         private System.Windows.Forms.Button btnNewConfig;
         private System.Windows.Forms.Button btnRunSequence;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tbFileInfoFilename;
+        private System.Windows.Forms.TextBox tbFileInfoSize;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox tbFileInfoCreated;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox tbFileInfoNumberOfPackets;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox tbFileInfoEstTime;
+        private System.Windows.Forms.Label label19;
     }
 }
 

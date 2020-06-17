@@ -75,21 +75,46 @@ namespace PacketSend.Classes
         public string FileName = "";
         public OfflinePacketDevice OfflineDevice;
         public int PacketCount = 0;
+        private int TimePacketCount = 0;
         public int RunningSpeedPacketCount = 0;
         private List<Packet> AlteredPackets = new List<Packet>();
         public RunSpeeds RunSpeed = RunSpeeds.Original;
         public int RTP_Packets = 0;
         public int SIP_Packets = 0;
+        public long FileSizeKB = 0;
+        public string FileCreatedOn = "";
+
+        private long _file_est_time = 0;
+        public long FileEstTime
+        {
+            get
+            {
+                return (long)EndTime.Subtract(StartTime).TotalSeconds;
+            }
+
+            set
+            {
+                _file_est_time = value;
+            }
+        }
+
+        private DateTime StartTime;
+        private DateTime EndTime;
 
         public WiresharkFile(string filepath)
         {
             FileName = filepath;
             PacketCount = 0;
+            TimePacketCount = 0;
+            FileInfo file = new FileInfo(filepath);
+            FileSizeKB = file.Length / 1000;
+            FileCreatedOn = file.CreationTime.ToString();
+            FileEstTime = 0;
 
             // Create the offline device
             OfflineDevice = new OfflinePacketDevice(filepath);
 
-            // Open the capture file
+            // Count packets
             using (PacketCommunicator communicator =
                 OfflineDevice.Open(65536,                                   // portion of the packet to capture
                                                                             // 65536 guarantees that the whole packet will be captured on all the link layers
@@ -98,6 +123,17 @@ namespace PacketSend.Classes
             {
                 // Read and dispatch packets until EOF is reached
                 communicator.ReceivePackets(0, ProcessNewFilePackets);
+            }
+
+            // Estimate time
+            using (PacketCommunicator communicator =
+                OfflineDevice.Open(65536,                                   // portion of the packet to capture
+                                                                            // 65536 guarantees that the whole packet will be captured on all the link layers
+                                    PacketDeviceOpenAttributes.Promiscuous, // promiscuous mode
+                                    1000))                                  // read timeout
+            {
+                // Read and dispatch packets until EOF is reached
+                communicator.ReceivePackets(0, EstimateTime);
             }
 
             Common.ConsoleWriteLine(ConsoleText);
@@ -312,6 +348,26 @@ namespace PacketSend.Classes
 
             if (IsSIP(packet)) SIP_Packets++;
             if (IsRTP(packet)) RTP_Packets++;
+
+            if(PacketCount == 1)
+            {
+                StartTime = packet.Timestamp;
+            }
+        }
+
+        private void EstimateTime(Packet packet)
+        {
+            TimePacketCount++;
+
+            if (TimePacketCount == 1)
+            {
+                StartTime = packet.Timestamp;
+            }
+
+            if(TimePacketCount == PacketCount)
+            {
+                EndTime = packet.Timestamp;
+            }
         }
 
         public static bool IsSIP(Packet packet)
