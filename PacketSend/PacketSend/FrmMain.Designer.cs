@@ -29,22 +29,22 @@
         private void InitializeComponent()
         {
             this.btnRunFile1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnStopFile1 = new System.Windows.Forms.Button();
             this.btnLoadFile1 = new System.Windows.Forms.Button();
             this.btnLoadFile2 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
+            this.btnStopFile2 = new System.Windows.Forms.Button();
             this.btnRunFile2 = new System.Windows.Forms.Button();
             this.btnLoadFile3 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
+            this.btnStopFile3 = new System.Windows.Forms.Button();
             this.btnRunFile3 = new System.Windows.Forms.Button();
             this.btnLoadFile4 = new System.Windows.Forms.Button();
-            this.button11 = new System.Windows.Forms.Button();
+            this.btnStopFile4 = new System.Windows.Forms.Button();
             this.btnRunFile4 = new System.Windows.Forms.Button();
             this.btnLoadFile5 = new System.Windows.Forms.Button();
-            this.button14 = new System.Windows.Forms.Button();
+            this.btnStopFile5 = new System.Windows.Forms.Button();
             this.btnRunFile5 = new System.Windows.Forms.Button();
             this.btnLoadFile6 = new System.Windows.Forms.Button();
-            this.button17 = new System.Windows.Forms.Button();
+            this.btnStopFile6 = new System.Windows.Forms.Button();
             this.btnRunFile6 = new System.Windows.Forms.Button();
             this.tbFile1 = new System.Windows.Forms.TextBox();
             this.tbPacketCount1 = new System.Windows.Forms.TextBox();
@@ -103,6 +103,9 @@
             this.label18 = new System.Windows.Forms.Label();
             this.tbFileInfoEstTime = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
+            this.ckbDetailedMode = new System.Windows.Forms.CheckBox();
+            this.rtbSIPConsole = new System.Windows.Forms.RichTextBox();
+            this.lbVersion = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -116,14 +119,15 @@
             this.btnRunFile1.UseVisualStyleBackColor = true;
             this.btnRunFile1.Click += new System.EventHandler(this.btnRunFile_Click);
             // 
-            // button2
+            // btnStopFile1
             // 
-            this.button2.Location = new System.Drawing.Point(65, 175);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(47, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Stop";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnStopFile1.Location = new System.Drawing.Point(65, 175);
+            this.btnStopFile1.Name = "btnStopFile1";
+            this.btnStopFile1.Size = new System.Drawing.Size(47, 23);
+            this.btnStopFile1.TabIndex = 1;
+            this.btnStopFile1.Text = "Stop";
+            this.btnStopFile1.UseVisualStyleBackColor = true;
+            this.btnStopFile1.Click += new System.EventHandler(this.btnStopFile_Click);
             // 
             // btnLoadFile1
             // 
@@ -145,14 +149,15 @@
             this.btnLoadFile2.UseVisualStyleBackColor = true;
             this.btnLoadFile2.Click += new System.EventHandler(this.btnLoadFile_Click);
             // 
-            // button5
+            // btnStopFile2
             // 
-            this.button5.Location = new System.Drawing.Point(65, 204);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(47, 23);
-            this.button5.TabIndex = 4;
-            this.button5.Text = "Stop";
-            this.button5.UseVisualStyleBackColor = true;
+            this.btnStopFile2.Location = new System.Drawing.Point(65, 204);
+            this.btnStopFile2.Name = "btnStopFile2";
+            this.btnStopFile2.Size = new System.Drawing.Size(47, 23);
+            this.btnStopFile2.TabIndex = 4;
+            this.btnStopFile2.Text = "Stop";
+            this.btnStopFile2.UseVisualStyleBackColor = true;
+            this.btnStopFile2.Click += new System.EventHandler(this.btnStopFile_Click);
             // 
             // btnRunFile2
             // 
@@ -174,14 +179,15 @@
             this.btnLoadFile3.UseVisualStyleBackColor = true;
             this.btnLoadFile3.Click += new System.EventHandler(this.btnLoadFile_Click);
             // 
-            // button8
+            // btnStopFile3
             // 
-            this.button8.Location = new System.Drawing.Point(65, 233);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(47, 23);
-            this.button8.TabIndex = 7;
-            this.button8.Text = "Stop";
-            this.button8.UseVisualStyleBackColor = true;
+            this.btnStopFile3.Location = new System.Drawing.Point(65, 233);
+            this.btnStopFile3.Name = "btnStopFile3";
+            this.btnStopFile3.Size = new System.Drawing.Size(47, 23);
+            this.btnStopFile3.TabIndex = 7;
+            this.btnStopFile3.Text = "Stop";
+            this.btnStopFile3.UseVisualStyleBackColor = true;
+            this.btnStopFile3.Click += new System.EventHandler(this.btnStopFile_Click);
             // 
             // btnRunFile3
             // 
@@ -203,14 +209,15 @@
             this.btnLoadFile4.UseVisualStyleBackColor = true;
             this.btnLoadFile4.Click += new System.EventHandler(this.btnLoadFile_Click);
             // 
-            // button11
+            // btnStopFile4
             // 
-            this.button11.Location = new System.Drawing.Point(65, 262);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(47, 23);
-            this.button11.TabIndex = 10;
-            this.button11.Text = "Stop";
-            this.button11.UseVisualStyleBackColor = true;
+            this.btnStopFile4.Location = new System.Drawing.Point(65, 262);
+            this.btnStopFile4.Name = "btnStopFile4";
+            this.btnStopFile4.Size = new System.Drawing.Size(47, 23);
+            this.btnStopFile4.TabIndex = 10;
+            this.btnStopFile4.Text = "Stop";
+            this.btnStopFile4.UseVisualStyleBackColor = true;
+            this.btnStopFile4.Click += new System.EventHandler(this.btnStopFile_Click);
             // 
             // btnRunFile4
             // 
@@ -232,14 +239,15 @@
             this.btnLoadFile5.UseVisualStyleBackColor = true;
             this.btnLoadFile5.Click += new System.EventHandler(this.btnLoadFile_Click);
             // 
-            // button14
+            // btnStopFile5
             // 
-            this.button14.Location = new System.Drawing.Point(65, 291);
-            this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(47, 23);
-            this.button14.TabIndex = 13;
-            this.button14.Text = "Stop";
-            this.button14.UseVisualStyleBackColor = true;
+            this.btnStopFile5.Location = new System.Drawing.Point(65, 291);
+            this.btnStopFile5.Name = "btnStopFile5";
+            this.btnStopFile5.Size = new System.Drawing.Size(47, 23);
+            this.btnStopFile5.TabIndex = 13;
+            this.btnStopFile5.Text = "Stop";
+            this.btnStopFile5.UseVisualStyleBackColor = true;
+            this.btnStopFile5.Click += new System.EventHandler(this.btnStopFile_Click);
             // 
             // btnRunFile5
             // 
@@ -261,14 +269,15 @@
             this.btnLoadFile6.UseVisualStyleBackColor = true;
             this.btnLoadFile6.Click += new System.EventHandler(this.btnLoadFile_Click);
             // 
-            // button17
+            // btnStopFile6
             // 
-            this.button17.Location = new System.Drawing.Point(65, 320);
-            this.button17.Name = "button17";
-            this.button17.Size = new System.Drawing.Size(47, 23);
-            this.button17.TabIndex = 16;
-            this.button17.Text = "Stop";
-            this.button17.UseVisualStyleBackColor = true;
+            this.btnStopFile6.Location = new System.Drawing.Point(65, 320);
+            this.btnStopFile6.Name = "btnStopFile6";
+            this.btnStopFile6.Size = new System.Drawing.Size(47, 23);
+            this.btnStopFile6.TabIndex = 16;
+            this.btnStopFile6.Text = "Stop";
+            this.btnStopFile6.UseVisualStyleBackColor = true;
+            this.btnStopFile6.Click += new System.EventHandler(this.btnStopFile_Click);
             // 
             // btnRunFile6
             // 
@@ -371,7 +380,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(88, 115);
+            this.label5.Location = new System.Drawing.Point(18, 114);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(42, 13);
             this.label5.TabIndex = 46;
@@ -381,7 +390,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(136, 115);
+            this.label6.Location = new System.Drawing.Point(66, 114);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(29, 13);
             this.label6.TabIndex = 47;
@@ -391,7 +400,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(171, 115);
+            this.label7.Location = new System.Drawing.Point(101, 114);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(25, 13);
             this.label7.TabIndex = 48;
@@ -401,7 +410,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(202, 115);
+            this.label8.Location = new System.Drawing.Point(132, 114);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(25, 13);
             this.label8.TabIndex = 49;
@@ -411,7 +420,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(233, 115);
+            this.label9.Location = new System.Drawing.Point(163, 114);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(25, 13);
             this.label9.TabIndex = 50;
@@ -421,7 +430,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(264, 115);
+            this.label10.Location = new System.Drawing.Point(194, 114);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(31, 13);
             this.label10.TabIndex = 51;
@@ -431,7 +440,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(119, 94);
+            this.label11.Location = new System.Drawing.Point(49, 93);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(153, 13);
             this.label11.TabIndex = 52;
@@ -618,7 +627,7 @@
             this.panel1.Controls.Add(this.rb100);
             this.panel1.Controls.Add(this.rbZero);
             this.panel1.Controls.Add(this.rbOriginal);
-            this.panel1.Location = new System.Drawing.Point(76, 137);
+            this.panel1.Location = new System.Drawing.Point(6, 136);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(235, 26);
             this.panel1.TabIndex = 77;
@@ -690,7 +699,7 @@
             this.rtbConsole.Location = new System.Drawing.Point(625, 93);
             this.rtbConsole.Name = "rtbConsole";
             this.rtbConsole.ReadOnly = true;
-            this.rtbConsole.Size = new System.Drawing.Size(430, 429);
+            this.rtbConsole.Size = new System.Drawing.Size(430, 250);
             this.rtbConsole.TabIndex = 78;
             this.rtbConsole.Text = "";
             // 
@@ -836,11 +845,43 @@
             this.label19.Text = "Est. Time:";
             this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // ckbDetailedMode
+            // 
+            this.ckbDetailedMode.AutoSize = true;
+            this.ckbDetailedMode.Location = new System.Drawing.Point(263, 142);
+            this.ckbDetailedMode.Name = "ckbDetailedMode";
+            this.ckbDetailedMode.Size = new System.Drawing.Size(220, 17);
+            this.ckbDetailedMode.TabIndex = 94;
+            this.ckbDetailedMode.Text = "Detailed Mode (Only SIP && RTP - SLOW)";
+            this.ckbDetailedMode.UseVisualStyleBackColor = true;
+            // 
+            // rtbSIPConsole
+            // 
+            this.rtbSIPConsole.Location = new System.Drawing.Point(625, 349);
+            this.rtbSIPConsole.Name = "rtbSIPConsole";
+            this.rtbSIPConsole.ReadOnly = true;
+            this.rtbSIPConsole.Size = new System.Drawing.Size(430, 181);
+            this.rtbSIPConsole.TabIndex = 95;
+            this.rtbSIPConsole.Text = "";
+            // 
+            // lbVersion
+            // 
+            this.lbVersion.AutoSize = true;
+            this.lbVersion.Location = new System.Drawing.Point(856, 30);
+            this.lbVersion.Name = "lbVersion";
+            this.lbVersion.Size = new System.Drawing.Size(63, 13);
+            this.lbVersion.TabIndex = 96;
+            this.lbVersion.Text = "Version: 1.0";
+            this.lbVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1067, 542);
+            this.Controls.Add(this.lbVersion);
+            this.Controls.Add(this.rtbSIPConsole);
+            this.Controls.Add(this.ckbDetailedMode);
             this.Controls.Add(this.tbFileInfoEstTime);
             this.Controls.Add(this.label19);
             this.Controls.Add(this.tbFileInfoNumberOfPackets);
@@ -893,22 +934,22 @@
             this.Controls.Add(this.tbPacketCount1);
             this.Controls.Add(this.tbFile1);
             this.Controls.Add(this.btnLoadFile6);
-            this.Controls.Add(this.button17);
+            this.Controls.Add(this.btnStopFile6);
             this.Controls.Add(this.btnRunFile6);
             this.Controls.Add(this.btnLoadFile5);
-            this.Controls.Add(this.button14);
+            this.Controls.Add(this.btnStopFile5);
             this.Controls.Add(this.btnRunFile5);
             this.Controls.Add(this.btnLoadFile4);
-            this.Controls.Add(this.button11);
+            this.Controls.Add(this.btnStopFile4);
             this.Controls.Add(this.btnRunFile4);
             this.Controls.Add(this.btnLoadFile3);
-            this.Controls.Add(this.button8);
+            this.Controls.Add(this.btnStopFile3);
             this.Controls.Add(this.btnRunFile3);
             this.Controls.Add(this.btnLoadFile2);
-            this.Controls.Add(this.button5);
+            this.Controls.Add(this.btnStopFile2);
             this.Controls.Add(this.btnRunFile2);
             this.Controls.Add(this.btnLoadFile1);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.btnStopFile1);
             this.Controls.Add(this.btnRunFile1);
             this.Name = "FrmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -924,22 +965,22 @@
         #endregion
 
         private System.Windows.Forms.Button btnRunFile1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnStopFile1;
         private System.Windows.Forms.Button btnLoadFile1;
         private System.Windows.Forms.Button btnLoadFile2;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button btnStopFile2;
         private System.Windows.Forms.Button btnRunFile2;
         private System.Windows.Forms.Button btnLoadFile3;
-        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button btnStopFile3;
         private System.Windows.Forms.Button btnRunFile3;
         private System.Windows.Forms.Button btnLoadFile4;
-        private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.Button btnStopFile4;
         private System.Windows.Forms.Button btnRunFile4;
         private System.Windows.Forms.Button btnLoadFile5;
-        private System.Windows.Forms.Button button14;
+        private System.Windows.Forms.Button btnStopFile5;
         private System.Windows.Forms.Button btnRunFile5;
         private System.Windows.Forms.Button btnLoadFile6;
-        private System.Windows.Forms.Button button17;
+        private System.Windows.Forms.Button btnStopFile6;
         private System.Windows.Forms.Button btnRunFile6;
         private System.Windows.Forms.TextBox tbFile1;
         private System.Windows.Forms.TextBox tbPacketCount1;
@@ -998,6 +1039,9 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.TextBox tbFileInfoEstTime;
         private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.CheckBox ckbDetailedMode;
+        private System.Windows.Forms.RichTextBox rtbSIPConsole;
+        private System.Windows.Forms.Label lbVersion;
     }
 }
 

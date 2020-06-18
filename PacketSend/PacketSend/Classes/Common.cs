@@ -21,9 +21,9 @@ namespace PacketSend.Classes
             sw.Stop();
         }
 
-        public static void ConsoleWriteLine(RichTextBox rtbConsole, string text = "")
+        public static void ConsoleWriteLine(RichTextBox rtbConsole, string text = "", bool newline = true)
         {
-            rtbConsole.Text += text + Environment.NewLine;
+            rtbConsole.Text += text + (newline ? Environment.NewLine : "");
             rtbConsole.SelectionStart = rtbConsole.Text.Length;
             rtbConsole.ScrollToCaret();
         }

@@ -20,6 +20,7 @@ namespace PacketSend
         private List<TextBox> TBFiles = new List<TextBox>();
         private List<TextBox> TBPacketCounts = new List<TextBox>();
         private List<CheckBox> CKBRuns = new List<CheckBox>();
+        private List<Button> BTNStops = new List<Button>();
 
         private bool _saved = false;
         private bool Saved
@@ -46,10 +47,14 @@ namespace PacketSend
             }
         }
 
+        private int CurrentFileNumber = -1;
+
         public FrmMain()
         {
             InitializeComponent();
+            lbVersion.Text = "Version: " + ProductVersion;
             rtbConsole.BackColor = Color.White;
+            rtbSIPConsole.BackColor = Color.White;
 
             // Setup all wireshark files
             WiresharkFiles.Add(null);
@@ -58,6 +63,14 @@ namespace PacketSend
             WiresharkFiles.Add(null);
             WiresharkFiles.Add(null);
             WiresharkFiles.Add(null);
+
+            // Setup buttons
+            BTNStops.Add(btnStopFile1);
+            BTNStops.Add(btnStopFile2);
+            BTNStops.Add(btnStopFile3);
+            BTNStops.Add(btnStopFile4);
+            BTNStops.Add(btnStopFile5);
+            BTNStops.Add(btnStopFile6);
 
             // Setup textboxes
             TBFiles.Add(tbFile1);
@@ -85,6 +98,7 @@ namespace PacketSend
             // Get Network Adapters
             WiresharkFile.UpdateNetworkAdapters();
             WiresharkFile.ConsoleText = rtbConsole;
+            WiresharkFile.SIPConsoleText = rtbSIPConsole;
 
             // Fill drop down with network adapters
             cbNetworkAdapters.Items.Clear();
@@ -168,6 +182,38 @@ namespace PacketSend
                 }
             }
 
+            for(int i = 0; i < 5; i++)
+            {
+                if (WiresharkFiles[i] == null) continue;
+
+                string info_file_tb_name = "tbFile1";
+
+                switch (i)
+                {
+                    case 0:
+                        info_file_tb_name = "tbFile1";
+                        break;
+                    case 1:
+                        info_file_tb_name = "tbFile2";
+                        break;
+                    case 2:
+                        info_file_tb_name = "tbFile3";
+                        break;
+                    case 3:
+                        info_file_tb_name = "tbFile4";
+                        break;
+                    case 4:
+                        info_file_tb_name = "tbFile5";
+                        break;
+                    case 5:
+                        info_file_tb_name = "tbFile6";
+                        break;
+                }
+
+                TextBox info_tb_file = new TextBox() { Name = info_file_tb_name };
+                tbFile_Click(info_tb_file, null);
+            }
+
             Properties.Settings.Default.CurrentConfigFile = filename;
             lbCurrentConfigFile.Text = Properties.Settings.Default.CurrentConfigFile;
             Saved = true;
@@ -182,13 +228,82 @@ namespace PacketSend
 
             if (file_number == -1) return;
 
-            string file_name = GetFile();
+            List<string> file_names = GetFiles();
 
-            if (file_name == "error") return;
+            if (file_names == null) return;
 
-            WiresharkFiles[file_number] = new WiresharkFile(file_name);
-            TBFiles[file_number].Text = file_name;
-            TBPacketCounts[file_number].Text = WiresharkFiles[file_number].PacketCount.ToString();
+            if(file_names.Count == 1)
+            {
+                WiresharkFiles[file_number] = new WiresharkFile(file_names[0]);
+                TBFiles[file_number].Text = file_names[0];
+                TBPacketCounts[file_number].Text = WiresharkFiles[file_number].PacketCount.ToString();
+
+                string info_file_tb_name = "tbFile1";
+
+                switch (file_number)
+                {
+                    case 0:
+                        info_file_tb_name = "tbFile1";
+                        break;
+                    case 1:
+                        info_file_tb_name = "tbFile2";
+                        break;
+                    case 2:
+                        info_file_tb_name = "tbFile3";
+                        break;
+                    case 3:
+                        info_file_tb_name = "tbFile4";
+                        break;
+                    case 4:
+                        info_file_tb_name = "tbFile5";
+                        break;
+                    case 5:
+                        info_file_tb_name = "tbFile6";
+                        break;
+                }
+
+                TextBox info_tb_file = new TextBox() { Name = info_file_tb_name };
+                tbFile_Click(info_tb_file, null);
+            }
+            else
+            {
+                for (int i = 0; i < file_names.Count; i++)
+                {
+                    if (i > 5) break;
+
+                    WiresharkFiles[i] = new WiresharkFile(file_names[i]);
+                    TBFiles[i].Text = file_names[i];
+                    TBPacketCounts[i].Text = WiresharkFiles[file_number].PacketCount.ToString();
+
+                    string info_file_tb_name = "tbFile1";
+
+                    switch (i)
+                    {
+                        case 0:
+                            info_file_tb_name = "tbFile1";
+                            break;
+                        case 1:
+                            info_file_tb_name = "tbFile2";
+                            break;
+                        case 2:
+                            info_file_tb_name = "tbFile3";
+                            break;
+                        case 3:
+                            info_file_tb_name = "tbFile4";
+                            break;
+                        case 4:
+                            info_file_tb_name = "tbFile5";
+                            break;
+                        case 5:
+                            info_file_tb_name = "tbFile6";
+                            break;
+                    }
+
+                    TextBox info_tb_file = new TextBox() { Name = info_file_tb_name };
+                    tbFile_Click(info_tb_file, null);
+
+                }
+            }
 
             Saved = false;
 
@@ -249,24 +364,46 @@ namespace PacketSend
                         return 4;
                     case "btnRunFile6":
                         return 5;
+
+                    case "btnStopFile1":
+                        return 0;
+                    case "btnStopFile2":
+                        return 1;
+                    case "btnStopFile3":
+                        return 2;
+                    case "btnStopFile4":
+                        return 3;
+                    case "btnStopFile5":
+                        return 4;
+                    case "btnStopFile6":
+                        return 5;
                 }
             }
 
             return -1;
         }
 
-        private string GetFile()
+        private List<string> GetFiles()
         {
-            OpenFileDialog ofdGetFild = new OpenFileDialog();
-            ofdGetFild.Filter = "Wireshark files (*.cap, *.pcap) | *.cap; *.pcap";
-            DialogResult r = ofdGetFild.ShowDialog();
+            OpenFileDialog ofdGetFile = new OpenFileDialog();
+            ofdGetFile.Multiselect = true;
+            ofdGetFile.Filter = "Wireshark files (*.cap, *.pcap) | *.cap; *.pcap";
+            DialogResult r = ofdGetFile.ShowDialog();
 
             if(r == DialogResult.OK)
             {
-                return ofdGetFild.FileName;
+                List<string> files = new List<string>();
+
+                for (int i = 0; i < ofdGetFile.FileNames.Length; i++)
+                {
+                    if (i > 5) break;
+                    files.Add(ofdGetFile.FileNames[i]);
+                }
+
+                return files;
             }
 
-            return "error";
+            return null;
 
         }
 
@@ -306,16 +443,58 @@ namespace PacketSend
 
                 if(CKBRuns[i].Checked)
                 {
+
+                    string info_file_tb_name = "tbFile1";
+
+                    switch (i)
+                    {
+                        case 0:
+                            info_file_tb_name = "tbFile1";
+                            break;
+                        case 1:
+                            info_file_tb_name = "tbFile2";
+                            break;
+                        case 2:
+                            info_file_tb_name = "tbFile3";
+                            break;
+                        case 3:
+                            info_file_tb_name = "tbFile4";
+                            break;
+                        case 4:
+                            info_file_tb_name = "tbFile5";
+                            break;
+                        case 5:
+                            info_file_tb_name = "tbFile6";
+                            break;
+                    }
+
+                    TextBox info_tb_file = new TextBox() { Name = info_file_tb_name };
+                    tbFile_Click(info_tb_file, null);
+
                     TBFiles[i].BackColor = Color.LightBlue;
                     Common.WaitFor(10);
                     
                     if(run_speed == WiresharkFile.RunSpeeds.Original)
                     {
-                        WiresharkFiles[i].RunFile();
+                        if (ckbDetailedMode.Checked)
+                        {
+                            WiresharkFiles[i].RunWithStopFeature();
+                        }
+                        else
+                        {
+                            WiresharkFiles[i].RunFile();
+                        }
                     }
                     else
                     {
-                        WiresharkFiles[i].RunFileWithSpeed(run_speed);
+                        if (ckbDetailedMode.Checked)
+                        {
+                            WiresharkFiles[i].RunWithStopFeature(run_speed);
+                        }
+                        else
+                        {
+                            WiresharkFiles[i].RunFileWithSpeed(run_speed);
+                        }
                     }
 
                     TBFiles[i].BackColor = Color.LightGreen;
@@ -335,6 +514,8 @@ namespace PacketSend
             if (file_number == -1) return;
 
             if (WiresharkFiles[file_number] == null) return;
+
+            WiresharkFile.StopRunningAllFiles = false;
 
             WiresharkFile.RunSpeeds run_speed = WiresharkFile.RunSpeeds.Original;
 
@@ -359,16 +540,57 @@ namespace PacketSend
                 run_speed = WiresharkFile.RunSpeeds.s1000;
             }
 
+            string info_file_tb_name = "tbFile1";
+
+            switch (file_number)
+            {
+                case 0:
+                    info_file_tb_name = "tbFile1";
+                    break;
+                case 1:
+                    info_file_tb_name = "tbFile2";
+                    break;
+                case 2:
+                    info_file_tb_name = "tbFile3";
+                    break;
+                case 3:
+                    info_file_tb_name = "tbFile4";
+                    break;
+                case 4:
+                    info_file_tb_name = "tbFile5";
+                    break;
+                case 5:
+                    info_file_tb_name = "tbFile6";
+                    break;
+            }
+
+            TextBox info_tb_file = new TextBox() { Name = info_file_tb_name };
+            tbFile_Click(info_tb_file, null);
+
             TBFiles[file_number].BackColor = Color.LightBlue;
             Common.WaitFor(10);
 
             if(run_speed == WiresharkFile.RunSpeeds.Original)
             {
-                WiresharkFiles[file_number].RunFile();
+                if(ckbDetailedMode.Checked)
+                {
+                    WiresharkFiles[file_number].RunWithStopFeature();
+                }
+                else
+                {
+                    WiresharkFiles[file_number].RunFile();
+                }
             }
             else
             {
-                WiresharkFiles[file_number].RunFileWithSpeed(run_speed);
+                if (ckbDetailedMode.Checked)
+                {
+                    WiresharkFiles[file_number].RunWithStopFeature(run_speed);
+                }
+                else
+                {
+                    WiresharkFiles[file_number].RunFileWithSpeed(run_speed);
+                }                
             }
 
             TBFiles[file_number].BackColor = SystemColors.Control;
@@ -511,11 +733,13 @@ namespace PacketSend
         private void ChangesMade(object sender, EventArgs e)
         {
             Saved = false;
+            UpdateEstTime();
         }
 
         private void btnClearConsole_Click(object sender, EventArgs e)
         {
             rtbConsole.Text = "";
+            rtbSIPConsole.Text = "";
         }
 
         private void btnNewConfig_Click(object sender, EventArgs e)
@@ -552,13 +776,18 @@ namespace PacketSend
 
             if (WiresharkFiles[file_number] == null) return;
 
+            CurrentFileNumber = file_number;
+
             tbFileInfoFilename.Text = WiresharkFiles[file_number].FileName;
             tbFileInfoSize.Text = WiresharkFiles[file_number].FileSizeKB.ToString() + "KB";
             tbFileInfoCreated.Text = WiresharkFiles[file_number].FileCreatedOn;
             tbFileInfoNumberOfPackets.Text = WiresharkFiles[file_number].PacketCount + " (SIP: " + WiresharkFiles[file_number].SIP_Packets + "  ::  RTP: " + WiresharkFiles[file_number].RTP_Packets + ")";
 
-
-            if(rbOriginal.Checked)
+            if(ckbDetailedMode.Checked)
+            {
+                tbFileInfoEstTime.Text = "Time Varies";
+            }
+            else if(rbOriginal.Checked)
             {
                 tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime(WiresharkFiles[file_number].FileEstTime);
             }
@@ -578,6 +807,43 @@ namespace PacketSend
             {
                 tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[file_number].PacketCount * 1000) / 1000000.0f);
             }
+        }
+
+        private void UpdateEstTime()
+        {
+            if (CurrentFileNumber == -1) return;
+
+            if (WiresharkFiles[CurrentFileNumber] == null) return;
+
+            if (ckbDetailedMode.Checked)
+            {
+                tbFileInfoEstTime.Text = "Time Varies";
+            }
+            else if (rbOriginal.Checked)
+            {
+                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime(WiresharkFiles[CurrentFileNumber].FileEstTime);
+            }
+            else if (rb100.Checked)
+            {
+                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[CurrentFileNumber].PacketCount * 100) / 1000000.0f);
+            }
+            else if (rb250.Checked)
+            {
+                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[CurrentFileNumber].PacketCount * 250) / 1000000.0f);
+            }
+            else if (rb500.Checked)
+            {
+                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[CurrentFileNumber].PacketCount * 500) / 1000000.0f);
+            }
+            else if (rb1000.Checked)
+            {
+                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[CurrentFileNumber].PacketCount * 1000) / 1000000.0f);
+            }
+        }
+
+        private void btnStopFile_Click(object sender, EventArgs e)
+        {
+            WiresharkFile.StopRunningAllFiles = true;
         }
     }
 }

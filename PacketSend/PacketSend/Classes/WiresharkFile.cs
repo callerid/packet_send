@@ -18,6 +18,8 @@ namespace PacketSend.Classes
     class WiresharkFile
     {
         public static RichTextBox ConsoleText;
+        public static RichTextBox SIPConsoleText;
+
         public static IList<LivePacketDevice> NetworkAdapters = new List<LivePacketDevice>();
         private static PacketDevice SelectedNetworkAdapter = null;
 
@@ -100,6 +102,11 @@ namespace PacketSend.Classes
 
         private DateTime StartTime;
         private DateTime EndTime;
+
+        // Stop feature
+        public static bool StopRunningAllFiles = false;
+        public int PacketsSentBeforeStop = 0;
+        public int PacketsNotSentAfterStop = 0;
 
         public WiresharkFile(string filepath)
         {
@@ -391,6 +398,323 @@ namespace PacketSend.Classes
             }
 
             return false;
+        }
+
+        // SIP types
+        private string GetSIPType(Packet packet)
+        {
+            string ascii_text = Encoding.ASCII.GetString(packet.Ethernet.IpV4.Payload.ToArray());
+
+            if(ascii_text.IndexOf("sip") == -1)
+            {
+                if(ascii_text.Length > 12)
+                {
+                    return "Unknown: " + ascii_text.Substring(0, 12);
+                }
+                return "Unknown! (no hint)";
+            }
+
+            string raw_type = ascii_text.Substring(8, ascii_text.IndexOf("sip") - 8).ToLower();
+
+            if (raw_type.Contains("invite"))
+            {
+                return "Invite";
+            }
+
+            if (raw_type.Contains("trying"))
+            {
+                return "Trying";
+            }
+
+            if (raw_type.Contains("ringing"))
+            {
+                return "Ringing";
+            }
+
+            if (raw_type.Contains("200 ok"))
+            {
+                return "200 OK";
+            }
+
+            if (raw_type.Contains("ack"))
+            {
+                return "ACK";
+            }
+
+            if (raw_type.Contains("bye"))
+            {
+                return "Bye";
+            }
+
+            if (raw_type.Contains("cancel"))
+            {
+                return "Cancel";
+            }
+
+            if (raw_type.Contains("notify"))
+            {
+                return "Notify";
+            }
+
+            if (raw_type.Contains("register"))
+            {
+                return "Register";
+            }
+
+            if (raw_type.Contains("603 decl"))
+            {
+                return "603 Declined";
+            }
+
+            if (raw_type.Contains("480 temp"))
+            {
+                return "480 Temporarily unavailable";
+            }
+
+            if (raw_type.Contains("401 unaut"))
+            {
+                return "401 Unauthorized";
+            }
+
+            if (raw_type.Contains("407 prox"))
+            {
+                return "407 Proxy Authentication required";
+            }
+
+            if (raw_type.Contains("181 call"))
+            {
+                return "181 Call is being forwarded";
+            }
+
+            if (raw_type.Contains("182 queued"))
+            {
+                return "182 Queued";
+            }
+
+            if (raw_type.Contains("183 sess"))
+            {
+                return "183 Session Progress";
+            }
+
+            if (raw_type.Contains("202 acce"))
+            {
+                return "202 Accepted";
+            }
+
+            if (raw_type.Contains("487 requ"))
+            {
+                return "487 Request Terminated";
+            }
+
+            if (raw_type.Contains("487 requ"))
+            {
+                return "487 Request Cancelled";
+            }
+
+            if (raw_type.Contains("subsc"))
+            {
+                return "Subscribe";
+            }
+
+            if (raw_type.Contains("481 call"))
+            {
+                return "481 Call Leg/ Transaction Does Not Exist";
+            }
+
+            if (raw_type.Contains("486 busy"))
+            {
+                return "486 Busy Here";
+            }
+
+            return "Unknown SIP: " + raw_type;
+        }
+
+        // Stop feature
+        public void RunWithStopFeature(RunSpeeds run_speed = RunSpeeds.Original)
+        {
+            if (string.IsNullOrEmpty(FileName)) return;
+            if (PacketCount == 0 || SelectedNetworkAdapter == null) return;
+
+            PacketsSentBeforeStop = 0;
+            PacketsNotSentAfterStop = 0;
+
+            SIPConsoleText.Text = "Sending File:\n " + FileName + "\n";
+
+            // Retrieve the length of the capture file
+            long capLength = new FileInfo(FileName).Length;
+
+            int time_interval = 100;
+
+            switch (run_speed)
+            {
+                case RunSpeeds.Original:
+                    time_interval = -1;
+                    break;
+                case RunSpeeds.s100:
+                    time_interval = 100;
+                    break;
+                case RunSpeeds.Zero:
+                    time_interval = 1;
+                    break;
+                case RunSpeeds.s250:
+                    time_interval = 250;
+                    break;
+                case RunSpeeds.s500:
+                    time_interval = 500;
+                    break;
+                case RunSpeeds.s1000:
+                    time_interval = 1000;
+                    break;
+                default:
+                    time_interval = 100;
+                    break;
+            }
+
+            DateTime time_stamp = DateTime.Now;
+
+            Common.ConsoleWriteLine(ConsoleText);
+            Common.ConsoleWriteLine(ConsoleText, "Preparing file timestamps...");
+            Common.WaitFor(50);
+
+            // Open the capture file
+            OfflinePacketDevice selectedInputDevice = new OfflinePacketDevice(FileName);
+
+            using (PacketCommunicator inputCommunicator =
+                selectedInputDevice.Open(65536, // portion of the packet to capture
+                                                // 65536 guarantees that the whole packet will be captured on all the link layers
+                                         PacketDeviceOpenAttributes.Promiscuous, // promiscuous mode
+                                         1000)) // read timeout
+            {
+                Application.DoEvents();
+
+                if (StopRunningAllFiles)
+                {
+                    Common.ConsoleWriteLine(ConsoleText, "Preparing of Packets Interupted. Stopping...");
+                    return;
+                }
+
+                // Open the output device
+                using (PacketCommunicator outputCommunicator =
+                    SelectedNetworkAdapter.Open(100, PacketDeviceOpenAttributes.Promiscuous, 1000))
+                {
+
+                    Application.DoEvents();
+
+                    if (StopRunningAllFiles)
+                    {
+                        Common.ConsoleWriteLine(ConsoleText, "Preparing of Packets Interupted. Stopping...");
+                        return;
+                    }
+
+                    // Fill the buffer with the packets from the file
+                    AlteredPackets = new List<Packet>();
+                    Packet packet;
+                    int packet_count = 0;
+                    while (inputCommunicator.ReceivePacket(out packet) == PacketCommunicatorReceiveResult.Ok)
+                    {
+                        Application.DoEvents();
+
+                        if (!IsSIP(packet) && !IsRTP(packet)) continue;
+
+                        // Create the builder that will build our packets
+                        EthernetLayer ethernet_layer = packet.Ethernet == null ? null : (EthernetLayer)packet.Ethernet.ExtractLayer();
+                        IpV4Layer ipv4_layer = packet.Ethernet.IpV4 == null ? null : (IpV4Layer)packet.Ethernet.IpV4.ExtractLayer();
+                        IcmpLayer icmp_layer = packet.Ethernet.IpV4.Icmp == null ? null : (IcmpLayer)packet.Ethernet.IpV4.Icmp.ExtractLayer();
+                        TransportLayer transport_layer = packet.Ethernet.IpV4.Transport == null ? null : (TransportLayer)packet.Ethernet.IpV4.Transport.ExtractLayer();
+                        PayloadLayer datagram_layer = packet.Ethernet.IpV4.Payload == null ? null : (PayloadLayer)packet.Ethernet.IpV4.Payload.ExtractLayer();
+
+                        try
+                        {
+                            if (ipv4_layer.Length < 1) // Catch null Length
+                            {
+                                // Do Nothing
+                            }
+                        }
+                        catch
+                        {
+                            ipv4_layer = null;
+                        }
+
+                        List<ILayer> layers = new List<ILayer>();
+
+                        if (IsRTP(packet))
+                        {
+                            if (ethernet_layer != null) layers.Add(ethernet_layer);
+                            if (ipv4_layer != null) layers.Add(ipv4_layer);
+                            if (datagram_layer != null) layers.Add(datagram_layer);
+                        }
+                        else
+                        {
+                            if (ethernet_layer != null) layers.Add(ethernet_layer);
+                            if (ipv4_layer != null) layers.Add(ipv4_layer);
+                            if (icmp_layer != null) layers.Add(icmp_layer);
+
+                            if (transport_layer != null) layers.Add(transport_layer);
+                            if (datagram_layer != null && IsRTP(packet)) layers.Add(datagram_layer);
+                        }
+
+                        PacketBuilder builder = new PacketBuilder(layers);
+
+                        Packet altered_packet = builder.Build(time_stamp.AddMilliseconds((packet_count * time_interval) / 1000));
+                        ProcessAlteredPacket(altered_packet);
+
+                        packet_count++;
+                    }
+
+                    Common.ConsoleWriteLine(ConsoleText, "Sending packets. Total to packets to send: " + AlteredPackets.Count);
+                    Common.WaitFor(50);
+
+                    if (StopRunningAllFiles)
+                    {
+                        Common.ConsoleWriteLine(ConsoleText, "Sending of Packets Interupted. Stopping...");
+                        return;
+                    }
+
+                    for (int i = 0; i < AlteredPackets.Count; i++)
+                    {
+                        Application.DoEvents();
+
+                        if (StopRunningAllFiles)
+                        {
+                            PacketsNotSentAfterStop = PacketCount - PacketsSentBeforeStop;
+                            StopRunningAllFiles = false;
+                            Common.ConsoleWriteLine(ConsoleText, "\nSending of Packets Interupted. Stopping...");
+                            break;
+                        }
+
+                        using (PacketSendBuffer sendBuffer = new PacketSendBuffer(4294967295))
+                        {
+                            sendBuffer.Enqueue(AlteredPackets[i]);
+
+                            if(i % 50 == 0)
+                            {
+                                Common.ConsoleWriteLine(ConsoleText, "   Current Packet: " + i.ToString());
+                            }
+                            
+                            outputCommunicator.Transmit(sendBuffer, false);
+
+                            if(IsSIP(AlteredPackets[i]))
+                            {
+                                string sip_type = GetSIPType(AlteredPackets[i]);
+
+                                if(!string.IsNullOrEmpty(sip_type))
+                                {
+                                    Common.ConsoleWriteLine(SIPConsoleText, "SIP [Packet # " + i.ToString() + "]: (" + sip_type + ") Packet Sent.");
+                                }
+                            }
+
+                        }
+
+                        PacketsSentBeforeStop++;
+
+                    }
+
+                    Common.ConsoleWriteLine(ConsoleText);
+                    Common.ConsoleWriteLine(ConsoleText, "File:\n" + FileName);
+                    Common.ConsoleWriteLine(ConsoleText, "Packets Sent: " + PacketsSentBeforeStop);
+                    Common.ConsoleWriteLine(ConsoleText, "Packets Not Sent: " + PacketsNotSentAfterStop);
+                }
+            }
         }
 
     }
