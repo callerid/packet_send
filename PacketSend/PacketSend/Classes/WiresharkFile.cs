@@ -682,30 +682,27 @@ namespace PacketSend.Classes
                             break;
                         }
 
-                        using (PacketSendBuffer sendBuffer = new PacketSendBuffer(4294967295))
+                        if (i % 50 == 0)
                         {
-                            sendBuffer.Enqueue(AlteredPackets[i]);
+                            Common.ConsoleWriteLine(ConsoleText, "   Current Packet: " + i.ToString());
+                        }
 
-                            if(i % 50 == 0)
+                        outputCommunicator.SendPacket(AlteredPackets[i]);
+
+                        if (IsSIP(AlteredPackets[i]))
+                        {
+                            string sip_type = GetSIPType(AlteredPackets[i]);
+
+                            if (!string.IsNullOrEmpty(sip_type))
                             {
-                                Common.ConsoleWriteLine(ConsoleText, "   Current Packet: " + i.ToString());
+                                Common.ConsoleWriteLine(SIPConsoleText, "SIP [Packet # " + i.ToString() + "]: (" + sip_type + ") Packet Sent.");
                             }
-                            
-                            outputCommunicator.Transmit(sendBuffer, false);
-
-                            if(IsSIP(AlteredPackets[i]))
-                            {
-                                string sip_type = GetSIPType(AlteredPackets[i]);
-
-                                if(!string.IsNullOrEmpty(sip_type))
-                                {
-                                    Common.ConsoleWriteLine(SIPConsoleText, "SIP [Packet # " + i.ToString() + "]: (" + sip_type + ") Packet Sent.");
-                                }
-                            }
-
                         }
 
                         PacketsSentBeforeStop++;
+
+                        // Wait before sending next packet
+                        Common.WaitFor(100);
 
                     }
 
