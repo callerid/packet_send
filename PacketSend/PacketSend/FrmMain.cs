@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using PcapDotNet.Core;
 using System.Xml;
 using System.IO;
+using System.Diagnostics;
 
 namespace PacketSend
 {
@@ -21,6 +22,7 @@ namespace PacketSend
         private List<TextBox> TBPacketCounts = new List<TextBox>();
         private List<CheckBox> CKBRuns = new List<CheckBox>();
         private List<Button> BTNStops = new List<Button>();
+        private List<Button> BTNOpens = new List<Button>();
 
         private bool _saved = false;
         private bool Saved
@@ -72,6 +74,13 @@ namespace PacketSend
             BTNStops.Add(btnStopFile5);
             BTNStops.Add(btnStopFile6);
 
+            BTNOpens.Add(btnOpenFile1);
+            BTNOpens.Add(btnOpenFile2);
+            BTNOpens.Add(btnOpenFile3);
+            BTNOpens.Add(btnOpenFile4);
+            BTNOpens.Add(btnOpenFile5);
+            BTNOpens.Add(btnOpenFile6);
+
             // Setup textboxes
             TBFiles.Add(tbFile1);
             TBFiles.Add(tbFile2);
@@ -99,6 +108,9 @@ namespace PacketSend
             WiresharkFile.UpdateNetworkAdapters();
             WiresharkFile.ConsoleText = rtbConsole;
             WiresharkFile.SIPConsoleText = rtbSIPConsole;
+            WiresharkFile.StopFeatureTimeInterval = 50;
+
+            ckbCleanMode.Text = "Clean Mode (Only SIP && RTP - " + WiresharkFile.StopFeatureTimeInterval + " ms interval)";
 
             // Fill drop down with network adapters
             cbNetworkAdapters.Items.Clear();
@@ -167,11 +179,14 @@ namespace PacketSend
                     int file_count = 0;
                     foreach(XmlNode child_node in node.ChildNodes)
                     {
-                        TBFiles[file_count].Text = child_node.ChildNodes.Count > 0 ? (child_node.ChildNodes[0].Value == null ? "" : child_node.ChildNodes[0].Value) : "";
+                        string full_path = child_node.ChildNodes.Count > 0 ? (child_node.ChildNodes[0].Value == null ? "" : child_node.ChildNodes[0].Value) : "";
+                        string only_filename = full_path.Substring(full_path.LastIndexOf("\\") + 1);
+
+                        TBFiles[file_count].Text = only_filename;
 
                         if (!string.IsNullOrEmpty(TBFiles[file_count].Text))
                         {
-                            WiresharkFiles[file_count] = new WiresharkFile(TBFiles[file_count].Text);
+                            WiresharkFiles[file_count] = new WiresharkFile(full_path);
                             TBPacketCounts[file_count].Text = WiresharkFiles[file_count].PacketCount.ToString();
                         }
 
@@ -235,7 +250,7 @@ namespace PacketSend
             if(file_names.Count == 1)
             {
                 WiresharkFiles[file_number] = new WiresharkFile(file_names[0]);
-                TBFiles[file_number].Text = file_names[0];
+                TBFiles[file_number].Text = file_names[0].Substring(file_names[0].LastIndexOf("\\") + 1);
                 TBPacketCounts[file_number].Text = WiresharkFiles[file_number].PacketCount.ToString();
 
                 string info_file_tb_name = "tbFile1";
@@ -272,7 +287,7 @@ namespace PacketSend
                     if (i > 5) break;
 
                     WiresharkFiles[i] = new WiresharkFile(file_names[i]);
-                    TBFiles[i].Text = file_names[i];
+                    TBFiles[i].Text = file_names[i].Substring(file_names[i].LastIndexOf("\\") + 1);
                     TBPacketCounts[i].Text = WiresharkFiles[file_number].PacketCount.ToString();
 
                     string info_file_tb_name = "tbFile1";
@@ -350,6 +365,19 @@ namespace PacketSend
                     case "btnLoadFile5":
                         return 4;
                     case "btnLoadFile6":
+                        return 5;
+
+                    case "btnOpenFile1":
+                        return 0;
+                    case "btnOpenFile2":
+                        return 1;
+                    case "btnOpenFile3":
+                        return 2;
+                    case "btnOpenFile4":
+                        return 3;
+                    case "btnOpenFile5":
+                        return 4;
+                    case "btnOpenFile6":
                         return 5;
 
                     case "btnRunFile1":
@@ -476,7 +504,7 @@ namespace PacketSend
                     
                     if(run_speed == WiresharkFile.RunSpeeds.Original)
                     {
-                        if (ckbDetailedMode.Checked)
+                        if (ckbCleanMode.Checked)
                         {
                             WiresharkFiles[i].RunWithStopFeature();
                         }
@@ -487,9 +515,9 @@ namespace PacketSend
                     }
                     else
                     {
-                        if (ckbDetailedMode.Checked)
+                        if (ckbCleanMode.Checked)
                         {
-                            WiresharkFiles[i].RunWithStopFeature(run_speed);
+                            WiresharkFiles[i].RunWithStopFeature();
                         }
                         else
                         {
@@ -572,7 +600,7 @@ namespace PacketSend
 
             if(run_speed == WiresharkFile.RunSpeeds.Original)
             {
-                if(ckbDetailedMode.Checked)
+                if(ckbCleanMode.Checked)
                 {
                     WiresharkFiles[file_number].RunWithStopFeature();
                 }
@@ -583,9 +611,9 @@ namespace PacketSend
             }
             else
             {
-                if (ckbDetailedMode.Checked)
+                if (ckbCleanMode.Checked)
                 {
-                    WiresharkFiles[file_number].RunWithStopFeature(run_speed);
+                    WiresharkFiles[file_number].RunWithStopFeature();
                 }
                 else
                 {
@@ -666,7 +694,16 @@ namespace PacketSend
                 {
                     xml_writer.WriteStartElement("file"); // Start file
                     xml_writer.WriteAttributeString("run_enabled", CKBRuns[i].Checked ? "True" : "False");
-                    xml_writer.WriteString(string.IsNullOrEmpty(TBFiles[i].Text) ? "" : TBFiles[i].Text);
+
+                    if (WiresharkFiles[i] == null)
+                    {
+                        xml_writer.WriteString("");
+                    }
+                    else
+                    {
+                        xml_writer.WriteString(string.IsNullOrEmpty(WiresharkFiles[i].FileName) ? "" : WiresharkFiles[i].FileName);
+                    }
+
                     xml_writer.WriteEndElement(); // End file
                 }
 
@@ -782,10 +819,11 @@ namespace PacketSend
             tbFileInfoSize.Text = WiresharkFiles[file_number].FileSizeKB.ToString() + "KB";
             tbFileInfoCreated.Text = WiresharkFiles[file_number].FileCreatedOn;
             tbFileInfoNumberOfPackets.Text = WiresharkFiles[file_number].PacketCount + " (SIP: " + WiresharkFiles[file_number].SIP_Packets + "  ::  RTP: " + WiresharkFiles[file_number].RTP_Packets + ")";
+            tbFileInfoSIPGateway.Text = WiresharkFiles[file_number].SIPGateway.ToString();
 
-            if(ckbDetailedMode.Checked)
+            if(ckbCleanMode.Checked)
             {
-                tbFileInfoEstTime.Text = "Time Varies";
+                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[file_number].DetailedPackets * WiresharkFile.StopFeatureTimeInterval) / 1000.0f);
             }
             else if(rbOriginal.Checked)
             {
@@ -815,9 +853,9 @@ namespace PacketSend
 
             if (WiresharkFiles[CurrentFileNumber] == null) return;
 
-            if (ckbDetailedMode.Checked)
+            if (ckbCleanMode.Checked)
             {
-                tbFileInfoEstTime.Text = "Time Varies";
+                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[CurrentFileNumber].DetailedPackets * WiresharkFile.StopFeatureTimeInterval) / 1000.0f);
             }
             else if (rbOriginal.Checked)
             {
@@ -844,6 +882,89 @@ namespace PacketSend
         private void btnStopFile_Click(object sender, EventArgs e)
         {
             WiresharkFile.StopRunningAllFiles = true;
+        }
+
+        private void btnOpenFile_Click(object sender, EventArgs e)
+        {
+            int file_number = GetFileNumber(sender);
+
+            if (file_number == -1) return;
+
+            if (WiresharkFiles[file_number] == null) return;
+
+            if(File.Exists(WiresharkFiles[file_number].FileName))
+            {
+                Process.Start(WiresharkFiles[file_number].FileName);
+            }
+
+        }
+
+        private void ckbCleanMode_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateEstTime();
+
+            if(ckbCleanMode.Checked)
+            {
+                rb100.Enabled = false;
+                rb1000.Enabled = false;
+                rb250.Enabled = false;
+                rb500.Enabled = false;
+                rbOriginal.Enabled = false;
+                rbZero.Enabled = false;
+
+                rb10ms.Enabled = true;
+                rb100ms.Enabled = true;
+                rb25ms.Enabled = true;
+                rb50ms.Enabled = true;
+            }
+            else
+            {
+                rb100.Enabled = true;
+                rb1000.Enabled = true;
+                rb250.Enabled = true;
+                rb500.Enabled = true;
+                rbOriginal.Enabled = true;
+                rbZero.Enabled = true;
+
+                rb10ms.Enabled = false;
+                rb100ms.Enabled = false;
+                rb25ms.Enabled = false;
+                rb50ms.Enabled = false;
+            }
+        }
+
+        private void btnCopySIPGateway_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(tbFileInfoSIPGateway.Text);
+            lbLastCopy.Text = "Last Copy: " + DateTime.Now.ToShortTimeString();
+        }
+
+        private void rbCleanModeTimeInterval_Click(object sender, EventArgs e)
+        {
+            if (rb10ms.Checked)
+            {
+                WiresharkFile.StopFeatureTimeInterval = 10;
+            }
+            else if (rb25ms.Checked)
+            {
+                WiresharkFile.StopFeatureTimeInterval = 25;
+            }
+            else if (rb50ms.Checked)
+            {
+                WiresharkFile.StopFeatureTimeInterval = 50;
+            }
+            else if (rb100ms.Checked)
+            {
+                WiresharkFile.StopFeatureTimeInterval = 100;
+            }
+
+            ckbCleanMode.Text = "Clean Mode (Only SIP && RTP - " + WiresharkFile.StopFeatureTimeInterval + " ms interval)";
+            UpdateEstTime();
+        }
+
+        private void rb10ms_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

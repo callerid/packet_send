@@ -103,9 +103,23 @@
             this.label18 = new System.Windows.Forms.Label();
             this.tbFileInfoEstTime = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
-            this.ckbDetailedMode = new System.Windows.Forms.CheckBox();
+            this.ckbCleanMode = new System.Windows.Forms.CheckBox();
             this.rtbSIPConsole = new System.Windows.Forms.RichTextBox();
             this.lbVersion = new System.Windows.Forms.Label();
+            this.btnOpenFile1 = new System.Windows.Forms.Button();
+            this.btnOpenFile2 = new System.Windows.Forms.Button();
+            this.btnOpenFile3 = new System.Windows.Forms.Button();
+            this.btnOpenFile4 = new System.Windows.Forms.Button();
+            this.btnOpenFile5 = new System.Windows.Forms.Button();
+            this.btnOpenFile6 = new System.Windows.Forms.Button();
+            this.tbFileInfoSIPGateway = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.btnCopySIPGateway = new System.Windows.Forms.Button();
+            this.lbLastCopy = new System.Windows.Forms.Label();
+            this.rb100ms = new System.Windows.Forms.RadioButton();
+            this.rb50ms = new System.Windows.Forms.RadioButton();
+            this.rb25ms = new System.Windows.Forms.RadioButton();
+            this.rb10ms = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -291,10 +305,10 @@
             // 
             // tbFile1
             // 
-            this.tbFile1.Location = new System.Drawing.Point(171, 178);
+            this.tbFile1.Location = new System.Drawing.Point(224, 178);
             this.tbFile1.Name = "tbFile1";
             this.tbFile1.ReadOnly = true;
-            this.tbFile1.Size = new System.Drawing.Size(330, 20);
+            this.tbFile1.Size = new System.Drawing.Size(277, 20);
             this.tbFile1.TabIndex = 18;
             this.tbFile1.Click += new System.EventHandler(this.tbFile_Click);
             // 
@@ -531,46 +545,46 @@
             // 
             // tbFile2
             // 
-            this.tbFile2.Location = new System.Drawing.Point(171, 207);
+            this.tbFile2.Location = new System.Drawing.Point(224, 207);
             this.tbFile2.Name = "tbFile2";
             this.tbFile2.ReadOnly = true;
-            this.tbFile2.Size = new System.Drawing.Size(330, 20);
+            this.tbFile2.Size = new System.Drawing.Size(277, 20);
             this.tbFile2.TabIndex = 67;
             this.tbFile2.Click += new System.EventHandler(this.tbFile_Click);
             // 
             // tbFile3
             // 
-            this.tbFile3.Location = new System.Drawing.Point(171, 235);
+            this.tbFile3.Location = new System.Drawing.Point(224, 235);
             this.tbFile3.Name = "tbFile3";
             this.tbFile3.ReadOnly = true;
-            this.tbFile3.Size = new System.Drawing.Size(330, 20);
+            this.tbFile3.Size = new System.Drawing.Size(277, 20);
             this.tbFile3.TabIndex = 68;
             this.tbFile3.Click += new System.EventHandler(this.tbFile_Click);
             // 
             // tbFile4
             // 
-            this.tbFile4.Location = new System.Drawing.Point(171, 264);
+            this.tbFile4.Location = new System.Drawing.Point(224, 264);
             this.tbFile4.Name = "tbFile4";
             this.tbFile4.ReadOnly = true;
-            this.tbFile4.Size = new System.Drawing.Size(330, 20);
+            this.tbFile4.Size = new System.Drawing.Size(277, 20);
             this.tbFile4.TabIndex = 69;
             this.tbFile4.Click += new System.EventHandler(this.tbFile_Click);
             // 
             // tbFile5
             // 
-            this.tbFile5.Location = new System.Drawing.Point(171, 294);
+            this.tbFile5.Location = new System.Drawing.Point(224, 294);
             this.tbFile5.Name = "tbFile5";
             this.tbFile5.ReadOnly = true;
-            this.tbFile5.Size = new System.Drawing.Size(330, 20);
+            this.tbFile5.Size = new System.Drawing.Size(277, 20);
             this.tbFile5.TabIndex = 70;
             this.tbFile5.Click += new System.EventHandler(this.tbFile_Click);
             // 
             // tbFile6
             // 
-            this.tbFile6.Location = new System.Drawing.Point(171, 322);
+            this.tbFile6.Location = new System.Drawing.Point(224, 322);
             this.tbFile6.Name = "tbFile6";
             this.tbFile6.ReadOnly = true;
-            this.tbFile6.Size = new System.Drawing.Size(330, 20);
+            this.tbFile6.Size = new System.Drawing.Size(277, 20);
             this.tbFile6.TabIndex = 71;
             this.tbFile6.Click += new System.EventHandler(this.tbFile_Click);
             // 
@@ -760,9 +774,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(37, 401);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(52, 13);
+            this.label3.Size = new System.Drawing.Size(47, 13);
             this.label3.TabIndex = 84;
-            this.label3.Text = "Filename:";
+            this.label3.Text = "Filepath:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tbFileInfoFilename
@@ -770,7 +784,7 @@
             this.tbFileInfoFilename.Location = new System.Drawing.Point(114, 398);
             this.tbFileInfoFilename.Name = "tbFileInfoFilename";
             this.tbFileInfoFilename.ReadOnly = true;
-            this.tbFileInfoFilename.Size = new System.Drawing.Size(387, 20);
+            this.tbFileInfoFilename.Size = new System.Drawing.Size(505, 20);
             this.tbFileInfoFilename.TabIndex = 85;
             // 
             // tbFileInfoSize
@@ -845,15 +859,16 @@
             this.label19.Text = "Est. Time:";
             this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // ckbDetailedMode
+            // ckbCleanMode
             // 
-            this.ckbDetailedMode.AutoSize = true;
-            this.ckbDetailedMode.Location = new System.Drawing.Point(263, 142);
-            this.ckbDetailedMode.Name = "ckbDetailedMode";
-            this.ckbDetailedMode.Size = new System.Drawing.Size(220, 17);
-            this.ckbDetailedMode.TabIndex = 94;
-            this.ckbDetailedMode.Text = "Detailed Mode (Only SIP && RTP - SLOW)";
-            this.ckbDetailedMode.UseVisualStyleBackColor = true;
+            this.ckbCleanMode.AutoSize = true;
+            this.ckbCleanMode.Location = new System.Drawing.Point(247, 142);
+            this.ckbCleanMode.Name = "ckbCleanMode";
+            this.ckbCleanMode.Size = new System.Drawing.Size(222, 17);
+            this.ckbCleanMode.TabIndex = 94;
+            this.ckbCleanMode.Text = "Clean Mode (Only SIP && RTP - ttt interval)";
+            this.ckbCleanMode.UseVisualStyleBackColor = true;
+            this.ckbCleanMode.CheckedChanged += new System.EventHandler(this.ckbCleanMode_CheckedChanged);
             // 
             // rtbSIPConsole
             // 
@@ -874,14 +889,177 @@
             this.lbVersion.Text = "Version: 1.0";
             this.lbVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // btnOpenFile1
+            // 
+            this.btnOpenFile1.Location = new System.Drawing.Point(171, 175);
+            this.btnOpenFile1.Name = "btnOpenFile1";
+            this.btnOpenFile1.Size = new System.Drawing.Size(47, 23);
+            this.btnOpenFile1.TabIndex = 97;
+            this.btnOpenFile1.Text = "Open";
+            this.btnOpenFile1.UseVisualStyleBackColor = true;
+            this.btnOpenFile1.Click += new System.EventHandler(this.btnOpenFile_Click);
+            // 
+            // btnOpenFile2
+            // 
+            this.btnOpenFile2.Location = new System.Drawing.Point(171, 205);
+            this.btnOpenFile2.Name = "btnOpenFile2";
+            this.btnOpenFile2.Size = new System.Drawing.Size(47, 23);
+            this.btnOpenFile2.TabIndex = 98;
+            this.btnOpenFile2.Text = "Open";
+            this.btnOpenFile2.UseVisualStyleBackColor = true;
+            this.btnOpenFile2.Click += new System.EventHandler(this.btnOpenFile_Click);
+            // 
+            // btnOpenFile3
+            // 
+            this.btnOpenFile3.Location = new System.Drawing.Point(171, 233);
+            this.btnOpenFile3.Name = "btnOpenFile3";
+            this.btnOpenFile3.Size = new System.Drawing.Size(47, 23);
+            this.btnOpenFile3.TabIndex = 99;
+            this.btnOpenFile3.Text = "Open";
+            this.btnOpenFile3.UseVisualStyleBackColor = true;
+            this.btnOpenFile3.Click += new System.EventHandler(this.btnOpenFile_Click);
+            // 
+            // btnOpenFile4
+            // 
+            this.btnOpenFile4.Location = new System.Drawing.Point(171, 262);
+            this.btnOpenFile4.Name = "btnOpenFile4";
+            this.btnOpenFile4.Size = new System.Drawing.Size(47, 23);
+            this.btnOpenFile4.TabIndex = 100;
+            this.btnOpenFile4.Text = "Open";
+            this.btnOpenFile4.UseVisualStyleBackColor = true;
+            this.btnOpenFile4.Click += new System.EventHandler(this.btnOpenFile_Click);
+            // 
+            // btnOpenFile5
+            // 
+            this.btnOpenFile5.Location = new System.Drawing.Point(171, 291);
+            this.btnOpenFile5.Name = "btnOpenFile5";
+            this.btnOpenFile5.Size = new System.Drawing.Size(47, 23);
+            this.btnOpenFile5.TabIndex = 101;
+            this.btnOpenFile5.Text = "Open";
+            this.btnOpenFile5.UseVisualStyleBackColor = true;
+            this.btnOpenFile5.Click += new System.EventHandler(this.btnOpenFile_Click);
+            // 
+            // btnOpenFile6
+            // 
+            this.btnOpenFile6.Location = new System.Drawing.Point(171, 320);
+            this.btnOpenFile6.Name = "btnOpenFile6";
+            this.btnOpenFile6.Size = new System.Drawing.Size(47, 23);
+            this.btnOpenFile6.TabIndex = 102;
+            this.btnOpenFile6.Text = "Open";
+            this.btnOpenFile6.UseVisualStyleBackColor = true;
+            this.btnOpenFile6.Click += new System.EventHandler(this.btnOpenFile_Click);
+            // 
+            // tbFileInfoSIPGateway
+            // 
+            this.tbFileInfoSIPGateway.Location = new System.Drawing.Point(114, 526);
+            this.tbFileInfoSIPGateway.Name = "tbFileInfoSIPGateway";
+            this.tbFileInfoSIPGateway.ReadOnly = true;
+            this.tbFileInfoSIPGateway.Size = new System.Drawing.Size(111, 20);
+            this.tbFileInfoSIPGateway.TabIndex = 104;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(37, 529);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(72, 13);
+            this.label4.TabIndex = 103;
+            this.label4.Text = "SIP Gateway:";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // btnCopySIPGateway
+            // 
+            this.btnCopySIPGateway.Location = new System.Drawing.Point(231, 524);
+            this.btnCopySIPGateway.Name = "btnCopySIPGateway";
+            this.btnCopySIPGateway.Size = new System.Drawing.Size(47, 23);
+            this.btnCopySIPGateway.TabIndex = 105;
+            this.btnCopySIPGateway.Text = "Copy";
+            this.btnCopySIPGateway.UseVisualStyleBackColor = true;
+            this.btnCopySIPGateway.Click += new System.EventHandler(this.btnCopySIPGateway_Click);
+            // 
+            // lbLastCopy
+            // 
+            this.lbLastCopy.AutoSize = true;
+            this.lbLastCopy.Location = new System.Drawing.Point(284, 529);
+            this.lbLastCopy.Name = "lbLastCopy";
+            this.lbLastCopy.Size = new System.Drawing.Size(132, 13);
+            this.lbLastCopy.TabIndex = 106;
+            this.lbLastCopy.Text = "Last Copy: Not Copied Yet";
+            this.lbLastCopy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // rb100ms
+            // 
+            this.rb100ms.AutoSize = true;
+            this.rb100ms.Enabled = false;
+            this.rb100ms.Location = new System.Drawing.Point(464, 123);
+            this.rb100ms.Name = "rb100ms";
+            this.rb100ms.Size = new System.Drawing.Size(59, 17);
+            this.rb100ms.TabIndex = 87;
+            this.rb100ms.Text = "100 ms";
+            this.rb100ms.UseVisualStyleBackColor = true;
+            this.rb100ms.Click += new System.EventHandler(this.rbCleanModeTimeInterval_Click);
+            // 
+            // rb50ms
+            // 
+            this.rb50ms.AutoSize = true;
+            this.rb50ms.Checked = true;
+            this.rb50ms.Enabled = false;
+            this.rb50ms.Location = new System.Drawing.Point(405, 123);
+            this.rb50ms.Name = "rb50ms";
+            this.rb50ms.Size = new System.Drawing.Size(53, 17);
+            this.rb50ms.TabIndex = 86;
+            this.rb50ms.TabStop = true;
+            this.rb50ms.Text = "50 ms";
+            this.rb50ms.UseVisualStyleBackColor = true;
+            this.rb50ms.Click += new System.EventHandler(this.rbCleanModeTimeInterval_Click);
+            // 
+            // rb25ms
+            // 
+            this.rb25ms.AutoSize = true;
+            this.rb25ms.Enabled = false;
+            this.rb25ms.Location = new System.Drawing.Point(346, 123);
+            this.rb25ms.Name = "rb25ms";
+            this.rb25ms.Size = new System.Drawing.Size(53, 17);
+            this.rb25ms.TabIndex = 85;
+            this.rb25ms.Text = "25 ms";
+            this.rb25ms.UseVisualStyleBackColor = true;
+            this.rb25ms.Click += new System.EventHandler(this.rbCleanModeTimeInterval_Click);
+            // 
+            // rb10ms
+            // 
+            this.rb10ms.AutoSize = true;
+            this.rb10ms.Enabled = false;
+            this.rb10ms.Location = new System.Drawing.Point(287, 123);
+            this.rb10ms.Name = "rb10ms";
+            this.rb10ms.Size = new System.Drawing.Size(53, 17);
+            this.rb10ms.TabIndex = 84;
+            this.rb10ms.Text = "10 ms";
+            this.rb10ms.UseVisualStyleBackColor = true;
+            this.rb10ms.CheckedChanged += new System.EventHandler(this.rb10ms_CheckedChanged);
+            this.rb10ms.Click += new System.EventHandler(this.rbCleanModeTimeInterval_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1067, 542);
+            this.ClientSize = new System.Drawing.Size(1067, 565);
+            this.Controls.Add(this.rb100ms);
+            this.Controls.Add(this.rb50ms);
+            this.Controls.Add(this.lbLastCopy);
+            this.Controls.Add(this.rb25ms);
+            this.Controls.Add(this.btnCopySIPGateway);
+            this.Controls.Add(this.rb10ms);
+            this.Controls.Add(this.tbFileInfoSIPGateway);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.btnOpenFile6);
+            this.Controls.Add(this.btnOpenFile5);
+            this.Controls.Add(this.btnOpenFile4);
+            this.Controls.Add(this.btnOpenFile3);
+            this.Controls.Add(this.btnOpenFile2);
+            this.Controls.Add(this.btnOpenFile1);
             this.Controls.Add(this.lbVersion);
             this.Controls.Add(this.rtbSIPConsole);
-            this.Controls.Add(this.ckbDetailedMode);
+            this.Controls.Add(this.ckbCleanMode);
             this.Controls.Add(this.tbFileInfoEstTime);
             this.Controls.Add(this.label19);
             this.Controls.Add(this.tbFileInfoNumberOfPackets);
@@ -1039,9 +1217,23 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.TextBox tbFileInfoEstTime;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.CheckBox ckbDetailedMode;
+        private System.Windows.Forms.CheckBox ckbCleanMode;
         private System.Windows.Forms.RichTextBox rtbSIPConsole;
         private System.Windows.Forms.Label lbVersion;
+        private System.Windows.Forms.Button btnOpenFile1;
+        private System.Windows.Forms.Button btnOpenFile2;
+        private System.Windows.Forms.Button btnOpenFile3;
+        private System.Windows.Forms.Button btnOpenFile4;
+        private System.Windows.Forms.Button btnOpenFile5;
+        private System.Windows.Forms.Button btnOpenFile6;
+        private System.Windows.Forms.TextBox tbFileInfoSIPGateway;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnCopySIPGateway;
+        private System.Windows.Forms.Label lbLastCopy;
+        private System.Windows.Forms.RadioButton rb100ms;
+        private System.Windows.Forms.RadioButton rb50ms;
+        private System.Windows.Forms.RadioButton rb25ms;
+        private System.Windows.Forms.RadioButton rb10ms;
     }
 }
 

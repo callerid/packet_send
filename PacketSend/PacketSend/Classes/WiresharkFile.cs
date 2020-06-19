@@ -85,6 +85,7 @@ namespace PacketSend.Classes
         public int SIP_Packets = 0;
         public long FileSizeKB = 0;
         public string FileCreatedOn = "";
+        public MacAddress SIPGateway = new MacAddress("00:00:00:00:00:00");
 
         private long _file_est_time = 0;
         public long FileEstTime
@@ -107,9 +108,13 @@ namespace PacketSend.Classes
         public static bool StopRunningAllFiles = false;
         public int PacketsSentBeforeStop = 0;
         public int PacketsNotSentAfterStop = 0;
+        public static int StopFeatureTimeInterval = 100; // Speed of detailed mode
+        public int DetailedPackets = 0;
 
         public WiresharkFile(string filepath)
         {
+            if (!File.Exists(filepath)) return;
+
             FileName = filepath;
             PacketCount = 0;
             TimePacketCount = 0;
@@ -152,10 +157,7 @@ namespace PacketSend.Classes
             if (string.IsNullOrEmpty(FileName)) return;
             if (run_speed == RunSpeeds.Original) return;
             if (PacketCount == 0 || SelectedNetworkAdapter == null) return;
-
-            // Retrieve the length of the capture file
-            long capLength = new FileInfo(FileName).Length;
-
+            
             int time_interval = 100;
 
             switch(run_speed)
@@ -247,7 +249,6 @@ namespace PacketSend.Classes
                         packet_count++;
                     }
 
-                    // Allocate a send buffer
                     using (PacketSendBuffer sendBuffer = new PacketSendBuffer(4294967295))
                     {
 
@@ -349,17 +350,94 @@ namespace PacketSend.Classes
             }
         }
 
+        private bool IsInternalIP(string[] ip_parts)
+        {
+            /*
+            * Internal Schemes
+                10.0.0.0 to 10.255.255.255 - Class A
+                172.16.0.0 to 172.31.255.255 - Class B
+                192.168.0.0 to 192.168.255.255 - Class C
+            */
+
+            if (int.Parse(ip_parts[0]) == 10) return true;
+            if (int.Parse(ip_parts[0]) == 172 && int.Parse(ip_parts[1]) == 16) return true;
+            if (int.Parse(ip_parts[0]) == 192 && int.Parse(ip_parts[1]) == 168) return true;
+
+            return false;
+
+        }
+
         private void ProcessNewFilePackets(Packet packet)
         {
             PacketCount++;
 
-            if (IsSIP(packet)) SIP_Packets++;
-            if (IsRTP(packet)) RTP_Packets++;
+            if (IsSIP(packet))
+            {
+                SIP_Packets++;
+                DetailedPackets++;
+
+                string type = GetSIPType(packet);
+
+                if (type == "Invite" && SIPGateway == new MacAddress("00:00:00:00:00:00"))
+                {
+                    string[] source_ip = packet.Ethernet.IpV4.Source.ToString().Split('.');
+                    string[] destination_ip = packet.Ethernet.IpV4.Destination.ToString().Split('.');
+
+                    if (!IsInternalIP(source_ip))
+                    {
+                        SIPGateway = packet.Ethernet.Source;
+                    }
+                    else
+                    {
+                        SIPGateway = packet.Ethernet.Destination;
+                    }
+                }
+
+                if (FilterPacket(type) != "No Filter")
+                {
+                    DetailedPackets--;
+                }
+
+            }
+
+            if (IsRTP(packet))
+            {
+                RTP_Packets++;
+                DetailedPackets++;
+            }
 
             if(PacketCount == 1)
             {
                 StartTime = packet.Timestamp;
             }
+        }
+
+        private string FilterPacket(string type)
+        {
+            if (
+                type == "Register" ||
+                type == "ACK" ||
+                type == "Update" ||
+                type == "PRACK" ||
+                type == "Subscribe" ||
+                type == "Notify" ||
+                type == "Publish" ||
+                type == "Message" ||
+                type == "Info" ||
+                type == "Options" ||
+                type.Contains("181") ||
+                type.Contains("182") ||
+                type.Contains("183") ||
+                type.Contains("199") ||
+                type.Contains("202") ||
+                type.Contains("204"))
+            {
+
+                return type;
+
+            }
+
+            return "No Filter";
         }
 
         private void EstimateTime(Packet packet)
@@ -496,9 +574,19 @@ namespace PacketSend.Classes
                 return "183 Session Progress";
             }
 
+            if (raw_type.Contains("199 ear"))
+            {
+                return "199 Early Dialog Terminated";
+            }
+
             if (raw_type.Contains("202 acce"))
             {
                 return "202 Accepted";
+            }
+
+            if (raw_type.Contains("204 no n"))
+            {
+                return "204 No Notification";
             }
 
             if (raw_type.Contains("487 requ"))
@@ -526,11 +614,46 @@ namespace PacketSend.Classes
                 return "486 Busy Here";
             }
 
+            if (raw_type.Contains("update"))
+            {
+                return "Update";
+            }
+
+            if (raw_type.Contains("refer"))
+            {
+                return "Refer";
+            }
+
+            if (raw_type.Contains("prack"))
+            {
+                return "PRACK";
+            }
+
+            if (raw_type.Contains("publish"))
+            {
+                return "Publish";
+            }
+
+            if (raw_type.Contains("message"))
+            {
+                return "Message";
+            }
+
+            if (raw_type.Contains("info"))
+            {
+                return "Info";
+            }
+
+            if (raw_type.Contains("options"))
+            {
+                return "Options";
+            }
+
             return "Unknown SIP: " + raw_type;
         }
 
         // Stop feature
-        public void RunWithStopFeature(RunSpeeds run_speed = RunSpeeds.Original)
+        public void RunWithStopFeature()
         {
             if (string.IsNullOrEmpty(FileName)) return;
             if (PacketCount == 0 || SelectedNetworkAdapter == null) return;
@@ -542,35 +665,6 @@ namespace PacketSend.Classes
 
             // Retrieve the length of the capture file
             long capLength = new FileInfo(FileName).Length;
-
-            int time_interval = 100;
-
-            switch (run_speed)
-            {
-                case RunSpeeds.Original:
-                    time_interval = -1;
-                    break;
-                case RunSpeeds.s100:
-                    time_interval = 100;
-                    break;
-                case RunSpeeds.Zero:
-                    time_interval = 1;
-                    break;
-                case RunSpeeds.s250:
-                    time_interval = 250;
-                    break;
-                case RunSpeeds.s500:
-                    time_interval = 500;
-                    break;
-                case RunSpeeds.s1000:
-                    time_interval = 1000;
-                    break;
-                default:
-                    time_interval = 100;
-                    break;
-            }
-
-            DateTime time_stamp = DateTime.Now;
 
             Common.ConsoleWriteLine(ConsoleText);
             Common.ConsoleWriteLine(ConsoleText, "Preparing file timestamps...");
@@ -610,11 +704,33 @@ namespace PacketSend.Classes
                     AlteredPackets = new List<Packet>();
                     Packet packet;
                     int packet_count = 0;
+                    DateTime StartTimeStamp = DateTime.Now;
+                    Dictionary<string, int> FilteredPackets = new Dictionary<string, int>();
                     while (inputCommunicator.ReceivePacket(out packet) == PacketCommunicatorReceiveResult.Ok)
                     {
                         Application.DoEvents();
 
                         if (!IsSIP(packet) && !IsRTP(packet)) continue;
+
+                        if (IsSIP(packet))
+                        {
+                            string type = GetSIPType(packet);
+
+                            if (FilterPacket(type) != "No Filter")
+                            {
+
+                                if (!FilteredPackets.ContainsKey(type))
+                                {
+                                    FilteredPackets.Add(type, 1);
+                                }
+                                else
+                                {
+                                    FilteredPackets[type]++;
+                                }
+
+                                continue;
+                            }
+                        }
 
                         // Create the builder that will build our packets
                         EthernetLayer ethernet_layer = packet.Ethernet == null ? null : (EthernetLayer)packet.Ethernet.ExtractLayer();
@@ -655,7 +771,7 @@ namespace PacketSend.Classes
 
                         PacketBuilder builder = new PacketBuilder(layers);
 
-                        Packet altered_packet = builder.Build(time_stamp.AddMilliseconds((packet_count * time_interval) / 1000));
+                        Packet altered_packet = builder.Build(StartTimeStamp.AddMilliseconds(packet_count * StopFeatureTimeInterval));
                         ProcessAlteredPacket(altered_packet);
 
                         packet_count++;
@@ -670,13 +786,15 @@ namespace PacketSend.Classes
                         return;
                     }
 
+                    int sip_sent = 0;
+                    int rtp_sent = 0;
                     for (int i = 0; i < AlteredPackets.Count; i++)
                     {
                         Application.DoEvents();
 
                         if (StopRunningAllFiles)
                         {
-                            PacketsNotSentAfterStop = PacketCount - PacketsSentBeforeStop;
+                            PacketsNotSentAfterStop = AlteredPackets.Count - PacketsSentBeforeStop;
                             StopRunningAllFiles = false;
                             Common.ConsoleWriteLine(ConsoleText, "\nSending of Packets Interupted. Stopping...");
                             break;
@@ -691,25 +809,55 @@ namespace PacketSend.Classes
 
                         if (IsSIP(AlteredPackets[i]))
                         {
+                            sip_sent++;
+                            bool is_vital_packet = false;
                             string sip_type = GetSIPType(AlteredPackets[i]);
 
-                            if (!string.IsNullOrEmpty(sip_type))
+                            if (
+                                sip_type == "Invite" ||
+                                sip_type == "Trying" ||
+                                sip_type == "Ringing" ||
+                                sip_type == "200 OK" ||
+                                sip_type == "Cancel" ||
+                                sip_type == "Bye")
                             {
-                                Common.ConsoleWriteLine(SIPConsoleText, "SIP [Packet # " + i.ToString() + "]: (" + sip_type + ") Packet Sent.");
+                                is_vital_packet = true;
                             }
+
+                                if (!string.IsNullOrEmpty(sip_type))
+                            {
+                                Common.ConsoleWriteLine(SIPConsoleText, (is_vital_packet ? " --> " : "") + "SIP: (" + sip_type + ") Packet Sent.");
+                            }
+                        }
+
+                        if(IsRTP(AlteredPackets[i]))
+                        {
+                            rtp_sent++;
                         }
 
                         PacketsSentBeforeStop++;
 
                         // Wait before sending next packet
-                        Common.WaitFor(100);
+                        Common.WaitFor(StopFeatureTimeInterval);
 
                     }
 
                     Common.ConsoleWriteLine(ConsoleText);
-                    Common.ConsoleWriteLine(ConsoleText, "File:\n" + FileName);
-                    Common.ConsoleWriteLine(ConsoleText, "Packets Sent: " + PacketsSentBeforeStop);
-                    Common.ConsoleWriteLine(ConsoleText, "Packets Not Sent: " + PacketsNotSentAfterStop);
+                    Common.ConsoleWriteLine(ConsoleText, "File:\n" + FileName + "\n");
+                    Common.ConsoleWriteLine(ConsoleText, "   Packets Sent: " + PacketsSentBeforeStop);
+                    Common.ConsoleWriteLine(ConsoleText, "   SIP Packets Sent: " + sip_sent);
+                    Common.ConsoleWriteLine(ConsoleText, "   RTP Packets Sent: " + rtp_sent);
+
+                    Common.ConsoleWriteLine(ConsoleText, "   ----------------");
+                    Common.ConsoleWriteLine(ConsoleText, "   Filtered Packets");
+                        Common.ConsoleWriteLine(ConsoleText, "   ----------------");
+                    foreach (string sip_type in FilteredPackets.Keys)
+                    {
+                        Common.ConsoleWriteLine(ConsoleText, "      " + FilteredPackets[sip_type].ToString() + " " + sip_type + " Packets Removed.");
+                    }
+                    Common.ConsoleWriteLine(ConsoleText, "   ----------------");
+
+                    Common.ConsoleWriteLine(ConsoleText, "   Packets Not Sent: " + PacketsNotSentAfterStop);
                 }
             }
         }
