@@ -120,7 +120,11 @@
             this.rb50ms = new System.Windows.Forms.RadioButton();
             this.rb25ms = new System.Windows.Forms.RadioButton();
             this.rb10ms = new System.Windows.Forms.RadioButton();
+            this.ckbLoopSend = new System.Windows.Forms.CheckBox();
+            this.ndLoops = new System.Windows.Forms.NumericUpDown();
+            this.lbCurrentLoop = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ndLoops)).BeginInit();
             this.SuspendLayout();
             // 
             // btnRunFile1
@@ -1038,11 +1042,51 @@
             this.rb10ms.CheckedChanged += new System.EventHandler(this.rb10ms_CheckedChanged);
             this.rb10ms.Click += new System.EventHandler(this.rbCleanModeTimeInterval_Click);
             // 
+            // ckbLoopSend
+            // 
+            this.ckbLoopSend.AutoSize = true;
+            this.ckbLoopSend.Location = new System.Drawing.Point(256, 351);
+            this.ckbLoopSend.Name = "ckbLoopSend";
+            this.ckbLoopSend.Size = new System.Drawing.Size(76, 17);
+            this.ckbLoopSend.TabIndex = 107;
+            this.ckbLoopSend.Text = "Loop send";
+            this.ckbLoopSend.UseVisualStyleBackColor = true;
+            // 
+            // ndLoops
+            // 
+            this.ndLoops.Location = new System.Drawing.Point(338, 350);
+            this.ndLoops.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.ndLoops.Name = "ndLoops";
+            this.ndLoops.Size = new System.Drawing.Size(61, 20);
+            this.ndLoops.TabIndex = 108;
+            this.ndLoops.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ndLoops.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // lbCurrentLoop
+            // 
+            this.lbCurrentLoop.AutoSize = true;
+            this.lbCurrentLoop.Location = new System.Drawing.Point(405, 355);
+            this.lbCurrentLoop.Name = "lbCurrentLoop";
+            this.lbCurrentLoop.Size = new System.Drawing.Size(67, 13);
+            this.lbCurrentLoop.TabIndex = 109;
+            this.lbCurrentLoop.Text = "Not Running";
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1067, 565);
+            this.Controls.Add(this.lbCurrentLoop);
+            this.Controls.Add(this.ndLoops);
+            this.Controls.Add(this.ckbLoopSend);
             this.Controls.Add(this.rb100ms);
             this.Controls.Add(this.rb50ms);
             this.Controls.Add(this.lbLastCopy);
@@ -1135,6 +1179,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ndLoops)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1234,6 +1279,9 @@
         private System.Windows.Forms.RadioButton rb50ms;
         private System.Windows.Forms.RadioButton rb25ms;
         private System.Windows.Forms.RadioButton rb10ms;
+        private System.Windows.Forms.CheckBox ckbLoopSend;
+        private System.Windows.Forms.NumericUpDown ndLoops;
+        private System.Windows.Forms.Label lbCurrentLoop;
     }
 }
 

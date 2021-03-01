@@ -598,29 +598,65 @@ namespace PacketSend
             TBFiles[file_number].BackColor = Color.LightBlue;
             Common.WaitFor(10);
 
-            if(run_speed == WiresharkFile.RunSpeeds.Original)
+            if (ckbLoopSend.Checked)
             {
-                if(ckbCleanMode.Checked)
+                for (int i = 0; i < ndLoops.Value; i++)
                 {
-                    WiresharkFiles[file_number].RunWithStopFeature();
-                }
-                else
-                {
-                    WiresharkFiles[file_number].RunFile();
+                    lbCurrentLoop.Text = "Loop: " + (i + 1).ToString() + " of " + ndLoops.Value;
+
+                    Application.DoEvents();
+
+                    if (run_speed == WiresharkFile.RunSpeeds.Original)
+                    {
+                        if (ckbCleanMode.Checked)
+                        {
+                            WiresharkFiles[file_number].RunWithStopFeature();
+                        }
+                        else
+                        {
+                            WiresharkFiles[file_number].RunFile();
+                        }
+                    }
+                    else
+                    {
+                        if (ckbCleanMode.Checked)
+                        {
+                            WiresharkFiles[file_number].RunWithStopFeature();
+                        }
+                        else
+                        {
+                            WiresharkFiles[file_number].RunFileWithSpeed(run_speed);
+                        }
+                    }
                 }
             }
             else
             {
-                if (ckbCleanMode.Checked)
+                if (run_speed == WiresharkFile.RunSpeeds.Original)
                 {
-                    WiresharkFiles[file_number].RunWithStopFeature();
+                    if (ckbCleanMode.Checked)
+                    {
+                        WiresharkFiles[file_number].RunWithStopFeature();
+                    }
+                    else
+                    {
+                        WiresharkFiles[file_number].RunFile();
+                    }
                 }
                 else
                 {
-                    WiresharkFiles[file_number].RunFileWithSpeed(run_speed);
-                }                
+                    if (ckbCleanMode.Checked)
+                    {
+                        WiresharkFiles[file_number].RunWithStopFeature();
+                    }
+                    else
+                    {
+                        WiresharkFiles[file_number].RunFileWithSpeed(run_speed);
+                    }
+                }
             }
 
+            lbCurrentLoop.Text = "Not Running";
             TBFiles[file_number].BackColor = SystemColors.Control;
 
         }
