@@ -154,6 +154,9 @@ namespace PacketSend.Classes
 
         public void RunFileWithSpeed(RunSpeeds run_speed)
         {
+            RunWithStopFeature();
+            return;
+
             if (string.IsNullOrEmpty(FileName)) return;
             if (run_speed == RunSpeeds.Original) return;
             if (PacketCount == 0 || SelectedNetworkAdapter == null) return;
@@ -287,6 +290,9 @@ namespace PacketSend.Classes
 
         public void RunFile()
         {
+            RunWithStopFeature();
+            return;
+
             if (string.IsNullOrEmpty(FileName)) return;
 
             if (PacketCount == 0 || SelectedNetworkAdapter == null) return;
@@ -492,7 +498,16 @@ namespace PacketSend.Classes
                 return "Unknown! (no hint)";
             }
 
-            string raw_type = ascii_text.Substring(8, ascii_text.IndexOf("sip") - 8).ToLower();
+            string raw_type = "";
+
+            try
+            {
+                raw_type = ascii_text.Substring(8, ascii_text.IndexOf("sip") - 8).ToLower();
+            }
+            catch(Exception ex)
+            {
+                raw_type = "Error";
+            }
 
             if (raw_type.Contains("invite"))
             {
@@ -653,8 +668,9 @@ namespace PacketSend.Classes
         }
 
         // Stop feature
-        public void RunWithStopFeature()
+        public void RunWithStopFeature(bool filtering = false)
         {
+
             if (string.IsNullOrEmpty(FileName)) return;
             if (PacketCount == 0 || SelectedNetworkAdapter == null) return;
 
@@ -706,32 +722,36 @@ namespace PacketSend.Classes
                     int packet_count = 0;
                     DateTime StartTimeStamp = DateTime.Now;
                     Dictionary<string, int> FilteredPackets = new Dictionary<string, int>();
+                                    
                     while (inputCommunicator.ReceivePacket(out packet) == PacketCommunicatorReceiveResult.Ok)
                     {
                         Application.DoEvents();
 
-                        if (!IsSIP(packet) && !IsRTP(packet)) continue;
-
-                        if (IsSIP(packet))
+                        if (filtering)
                         {
-                            string type = GetSIPType(packet);
+                            if (!IsSIP(packet) && !IsRTP(packet)) continue;
 
-                            if (FilterPacket(type) != "No Filter")
+                            if (IsSIP(packet))
                             {
+                                string type = GetSIPType(packet);
 
-                                if (!FilteredPackets.ContainsKey(type))
+                                if (FilterPacket(type) != "No Filter")
                                 {
-                                    FilteredPackets.Add(type, 1);
-                                }
-                                else
-                                {
-                                    FilteredPackets[type]++;
-                                }
 
-                                continue;
+                                    if (!FilteredPackets.ContainsKey(type))
+                                    {
+                                        FilteredPackets.Add(type, 1);
+                                    }
+                                    else
+                                    {
+                                        FilteredPackets[type]++;
+                                    }
+
+                                    continue;
+                                }
                             }
                         }
-
+                        
                         // Create the builder that will build our packets
                         EthernetLayer ethernet_layer = packet.Ethernet == null ? null : (EthernetLayer)packet.Ethernet.ExtractLayer();
                         IpV4Layer ipv4_layer = packet.Ethernet.IpV4 == null ? null : (IpV4Layer)packet.Ethernet.IpV4.ExtractLayer();
@@ -741,7 +761,11 @@ namespace PacketSend.Classes
 
                         try
                         {
-                            if (ipv4_layer.Length < 1) // Catch null Length
+                            if(ipv4_layer == null)
+                            {
+                                ipv4_layer = null;
+                            }
+                            else if (ipv4_layer.Length < 1) // Catch null Length
                             {
                                 // Do Nothing
                             }
@@ -805,7 +829,16 @@ namespace PacketSend.Classes
                             Common.ConsoleWriteLine(ConsoleText, "   Current Packet: " + i.ToString());
                         }
 
-                        outputCommunicator.SendPacket(AlteredPackets[i]);
+                        try
+                        {
+                            outputCommunicator.SendPacket(AlteredPackets[i]);
+                        }
+                        catch(Exception ex)
+                        {
+                            Console.WriteLine(ex.ToString());
+                            Common.ConsoleWriteLine(ConsoleText, "X -- Failed to send packet: " + i.ToString());
+                            continue;
+                        }
 
                         if (IsSIP(AlteredPackets[i]))
                         {

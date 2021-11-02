@@ -123,8 +123,11 @@
             this.ckbLoopSend = new System.Windows.Forms.CheckBox();
             this.ndLoops = new System.Windows.Forms.NumericUpDown();
             this.lbCurrentLoop = new System.Windows.Forms.Label();
+            this.ndMSOverride = new System.Windows.Forms.NumericUpDown();
+            this.label20 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ndLoops)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ndMSOverride)).BeginInit();
             this.SuspendLayout();
             // 
             // btnRunFile1
@@ -404,6 +407,7 @@
             this.label5.TabIndex = 46;
             this.label5.Text = "Original";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label5.Visible = false;
             // 
             // label6
             // 
@@ -414,6 +418,7 @@
             this.label6.TabIndex = 47;
             this.label6.Text = "Zero";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label6.Visible = false;
             // 
             // label7
             // 
@@ -424,6 +429,7 @@
             this.label7.TabIndex = 48;
             this.label7.Text = "100";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label7.Visible = false;
             // 
             // label8
             // 
@@ -434,6 +440,7 @@
             this.label8.TabIndex = 49;
             this.label8.Text = "250";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label8.Visible = false;
             // 
             // label9
             // 
@@ -444,6 +451,7 @@
             this.label9.TabIndex = 50;
             this.label9.Text = "500";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label9.Visible = false;
             // 
             // label10
             // 
@@ -454,6 +462,7 @@
             this.label10.TabIndex = 51;
             this.label10.Text = "1000";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label10.Visible = false;
             // 
             // label11
             // 
@@ -464,6 +473,7 @@
             this.label11.TabIndex = 52;
             this.label11.Text = "Time Interval in Micro Seconds";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label11.Visible = false;
             // 
             // btnLoadConfig
             // 
@@ -658,6 +668,7 @@
             this.rb1000.Size = new System.Drawing.Size(14, 13);
             this.rb1000.TabIndex = 83;
             this.rb1000.UseVisualStyleBackColor = true;
+            this.rb1000.Visible = false;
             this.rb1000.Click += new System.EventHandler(this.ChangesMade);
             // 
             // rb500
@@ -668,6 +679,7 @@
             this.rb500.Size = new System.Drawing.Size(14, 13);
             this.rb500.TabIndex = 82;
             this.rb500.UseVisualStyleBackColor = true;
+            this.rb500.Visible = false;
             this.rb500.Click += new System.EventHandler(this.ChangesMade);
             // 
             // rb250
@@ -678,6 +690,7 @@
             this.rb250.Size = new System.Drawing.Size(14, 13);
             this.rb250.TabIndex = 81;
             this.rb250.UseVisualStyleBackColor = true;
+            this.rb250.Visible = false;
             this.rb250.Click += new System.EventHandler(this.ChangesMade);
             // 
             // rb100
@@ -688,6 +701,7 @@
             this.rb100.Size = new System.Drawing.Size(14, 13);
             this.rb100.TabIndex = 80;
             this.rb100.UseVisualStyleBackColor = true;
+            this.rb100.Visible = false;
             this.rb100.Click += new System.EventHandler(this.ChangesMade);
             // 
             // rbZero
@@ -698,6 +712,7 @@
             this.rbZero.Size = new System.Drawing.Size(14, 13);
             this.rbZero.TabIndex = 79;
             this.rbZero.UseVisualStyleBackColor = true;
+            this.rbZero.Visible = false;
             this.rbZero.Click += new System.EventHandler(this.ChangesMade);
             // 
             // rbOriginal
@@ -710,6 +725,7 @@
             this.rbOriginal.TabIndex = 78;
             this.rbOriginal.TabStop = true;
             this.rbOriginal.UseVisualStyleBackColor = true;
+            this.rbOriginal.Visible = false;
             this.rbOriginal.Click += new System.EventHandler(this.ChangesMade);
             // 
             // rtbConsole
@@ -1001,6 +1017,7 @@
             this.rb100ms.TabIndex = 87;
             this.rb100ms.Text = "100 ms";
             this.rb100ms.UseVisualStyleBackColor = true;
+            this.rb100ms.Visible = false;
             this.rb100ms.Click += new System.EventHandler(this.rbCleanModeTimeInterval_Click);
             // 
             // rb50ms
@@ -1015,6 +1032,7 @@
             this.rb50ms.TabStop = true;
             this.rb50ms.Text = "50 ms";
             this.rb50ms.UseVisualStyleBackColor = true;
+            this.rb50ms.Visible = false;
             this.rb50ms.Click += new System.EventHandler(this.rbCleanModeTimeInterval_Click);
             // 
             // rb25ms
@@ -1027,6 +1045,7 @@
             this.rb25ms.TabIndex = 85;
             this.rb25ms.Text = "25 ms";
             this.rb25ms.UseVisualStyleBackColor = true;
+            this.rb25ms.Visible = false;
             this.rb25ms.Click += new System.EventHandler(this.rbCleanModeTimeInterval_Click);
             // 
             // rb10ms
@@ -1039,7 +1058,7 @@
             this.rb10ms.TabIndex = 84;
             this.rb10ms.Text = "10 ms";
             this.rb10ms.UseVisualStyleBackColor = true;
-            this.rb10ms.CheckedChanged += new System.EventHandler(this.rb10ms_CheckedChanged);
+            this.rb10ms.Visible = false;
             this.rb10ms.Click += new System.EventHandler(this.rbCleanModeTimeInterval_Click);
             // 
             // ckbLoopSend
@@ -1079,11 +1098,47 @@
             this.lbCurrentLoop.TabIndex = 109;
             this.lbCurrentLoop.Text = "Not Running";
             // 
+            // ndMSOverride
+            // 
+            this.ndMSOverride.Location = new System.Drawing.Point(281, 94);
+            this.ndMSOverride.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.ndMSOverride.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.ndMSOverride.Name = "ndMSOverride";
+            this.ndMSOverride.Size = new System.Drawing.Size(68, 20);
+            this.ndMSOverride.TabIndex = 110;
+            this.ndMSOverride.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ndMSOverride.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.ndMSOverride.ValueChanged += new System.EventHandler(this.ndMSOverride_ValueChanged);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(206, 96);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(69, 13);
+            this.label20.TabIndex = 111;
+            this.label20.Text = "Interval in ms";
+            this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1067, 565);
+            this.Controls.Add(this.label20);
+            this.Controls.Add(this.ndMSOverride);
             this.Controls.Add(this.lbCurrentLoop);
             this.Controls.Add(this.ndLoops);
             this.Controls.Add(this.ckbLoopSend);
@@ -1180,6 +1235,7 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ndLoops)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ndMSOverride)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1282,6 +1338,8 @@
         private System.Windows.Forms.CheckBox ckbLoopSend;
         private System.Windows.Forms.NumericUpDown ndLoops;
         private System.Windows.Forms.Label lbCurrentLoop;
+        private System.Windows.Forms.NumericUpDown ndMSOverride;
+        private System.Windows.Forms.Label label20;
     }
 }
 

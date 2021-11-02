@@ -506,7 +506,7 @@ namespace PacketSend
                     {
                         if (ckbCleanMode.Checked)
                         {
-                            WiresharkFiles[i].RunWithStopFeature();
+                            WiresharkFiles[i].RunWithStopFeature(true);
                         }
                         else
                         {
@@ -517,7 +517,7 @@ namespace PacketSend
                     {
                         if (ckbCleanMode.Checked)
                         {
-                            WiresharkFiles[i].RunWithStopFeature();
+                            WiresharkFiles[i].RunWithStopFeature(true);
                         }
                         else
                         {
@@ -610,7 +610,7 @@ namespace PacketSend
                     {
                         if (ckbCleanMode.Checked)
                         {
-                            WiresharkFiles[file_number].RunWithStopFeature();
+                            WiresharkFiles[file_number].RunWithStopFeature(true);
                         }
                         else
                         {
@@ -621,7 +621,7 @@ namespace PacketSend
                     {
                         if (ckbCleanMode.Checked)
                         {
-                            WiresharkFiles[file_number].RunWithStopFeature();
+                            WiresharkFiles[file_number].RunWithStopFeature(true);
                         }
                         else
                         {
@@ -636,7 +636,7 @@ namespace PacketSend
                 {
                     if (ckbCleanMode.Checked)
                     {
-                        WiresharkFiles[file_number].RunWithStopFeature();
+                        WiresharkFiles[file_number].RunWithStopFeature(true);
                     }
                     else
                     {
@@ -647,7 +647,7 @@ namespace PacketSend
                 {
                     if (ckbCleanMode.Checked)
                     {
-                        WiresharkFiles[file_number].RunWithStopFeature();
+                        WiresharkFiles[file_number].RunWithStopFeature(true);
                     }
                     else
                     {
@@ -889,6 +889,9 @@ namespace PacketSend
 
             if (WiresharkFiles[CurrentFileNumber] == null) return;
 
+            tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[CurrentFileNumber].PacketCount * (int)ndMSOverride.Value) / 1000.0f);
+            return;
+
             if (ckbCleanMode.Checked)
             {
                 tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[CurrentFileNumber].DetailedPackets * WiresharkFile.StopFeatureTimeInterval) / 1000.0f);
@@ -977,9 +980,15 @@ namespace PacketSend
 
         private void rbCleanModeTimeInterval_Click(object sender, EventArgs e)
         {
+            WiresharkFile.StopFeatureTimeInterval = (int)ndMSOverride.Value;
+            ckbCleanMode.Text = "Clean Mode (Only SIP && RTP - " + WiresharkFile.StopFeatureTimeInterval + " ms interval)";
+            UpdateEstTime();
+
+            return;
+
             if (rb10ms.Checked)
             {
-                WiresharkFile.StopFeatureTimeInterval = 10;
+                WiresharkFile.StopFeatureTimeInterval = 1;
             }
             else if (rb25ms.Checked)
             {
@@ -998,9 +1007,11 @@ namespace PacketSend
             UpdateEstTime();
         }
 
-        private void rb10ms_CheckedChanged(object sender, EventArgs e)
+        private void ndMSOverride_ValueChanged(object sender, EventArgs e)
         {
-
+            WiresharkFile.StopFeatureTimeInterval = (int)ndMSOverride.Value;
+            ckbCleanMode.Text = "Clean Mode (Only SIP && RTP - " + WiresharkFile.StopFeatureTimeInterval + " ms interval)";
+            UpdateEstTime();
         }
     }
 }
