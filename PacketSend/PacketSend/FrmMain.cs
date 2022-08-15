@@ -50,6 +50,7 @@ namespace PacketSend
         }
 
         private int CurrentFileNumber = -1;
+        public static long Granular = 1000;
 
         public FrmMain()
         {
@@ -108,9 +109,7 @@ namespace PacketSend
             WiresharkFile.UpdateNetworkAdapters();
             WiresharkFile.ConsoleText = rtbConsole;
             WiresharkFile.SIPConsoleText = rtbSIPConsole;
-            WiresharkFile.StopFeatureTimeInterval = 50;
-
-            ckbCleanMode.Text = "Clean Mode (Only SIP && RTP - " + WiresharkFile.StopFeatureTimeInterval + " ms interval)";
+            WiresharkFile.StopFeatureTimeIntervalMicroSeconds = 50000; // 50ms (us)
 
             // Fill drop down with network adapters
             cbNetworkAdapters.Items.Clear();
@@ -148,30 +147,30 @@ namespace PacketSend
             {
                 if(node.Name == "interval_speed")
                 {
-                    switch(node.ChildNodes[0].Value)
-                    {
-                        case "Original":
-                            rbOriginal.Checked = true;
-                            break;
-                        case "100":
-                            rb100.Checked = true;
-                            break;
-                        case "250":
-                            rb250.Checked = true;
-                            break;
-                        case "500":
-                            rb500.Checked = true;
-                            break;
-                        case "1000":
-                            rb1000.Checked = true;
-                            break;
-                        case "Zero":
-                            rbZero.Checked = true;
-                            break;
-                        default:
-                            rbOriginal.Checked = true;
-                            break;
-                    }
+                    //switch(node.ChildNodes[0].Value)
+                    //{
+                    //    case "Original":
+                    //        rbOriginal.Checked = true;
+                    //        break;
+                    //    case "100":
+                    //        rb100.Checked = true;
+                    //        break;
+                    //    case "250":
+                    //        rb250.Checked = true;
+                    //        break;
+                    //    case "500":
+                    //        rb500.Checked = true;
+                    //        break;
+                    //    case "1000":
+                    //        rb1000.Checked = true;
+                    //        break;
+                    //    case "Zero":
+                    //        rbZero.Checked = true;
+                    //        break;
+                    //    default:
+                    //        rbOriginal.Checked = true;
+                    //        break;
+                    //}
                 }
 
                 if(node.Name == "files")
@@ -442,30 +441,8 @@ namespace PacketSend
 
         private void btnRunSequence_Click(object sender, EventArgs e)
         {
-            WiresharkFile.RunSpeeds run_speed = WiresharkFile.RunSpeeds.Original;
-
-            if(rbOriginal.Checked)
-            {
-                run_speed = WiresharkFile.RunSpeeds.Original;
-            }
-            else if(rb100.Checked)
-            {
-                run_speed = WiresharkFile.RunSpeeds.s100;
-            }
-            else if (rb250.Checked)
-            {
-                run_speed = WiresharkFile.RunSpeeds.s250;
-            }
-            else if (rb500.Checked)
-            {
-                run_speed = WiresharkFile.RunSpeeds.s500;
-            }
-            else if (rb1000.Checked)
-            {
-                run_speed = WiresharkFile.RunSpeeds.s1000;
-            }
-
-            for(int i = 0; i < 6; i++)
+            UpdateGranular();
+            for (int i = 0; i < 6; i++)
             {
                 if (WiresharkFiles[i] == null) continue;
 
@@ -501,28 +478,25 @@ namespace PacketSend
 
                     TBFiles[i].BackColor = Color.LightBlue;
                     Common.WaitFor(10);
-                    
-                    if(run_speed == WiresharkFile.RunSpeeds.Original)
+
+                    if (rbOriginal.Checked)
                     {
-                        if (ckbCleanMode.Checked)
+                        WiresharkFiles[i].RunFile();
+                    }
+                    else if(rbGranular.Checked)
+                    {
+                        if (ckbBufferSend.Checked)
                         {
-                            WiresharkFiles[i].RunWithStopFeature(true);
+                            WiresharkFiles[i].RunFileWithSpeed();
                         }
                         else
                         {
-                            WiresharkFiles[i].RunFile();
+                            WiresharkFiles[i].RunWithStopFeature(false);
                         }
                     }
                     else
                     {
-                        if (ckbCleanMode.Checked)
-                        {
-                            WiresharkFiles[i].RunWithStopFeature(true);
-                        }
-                        else
-                        {
-                            WiresharkFiles[i].RunFileWithSpeed(run_speed);
-                        }
+                        WiresharkFiles[i].RunWithStopFeature(true);
                     }
 
                     TBFiles[i].BackColor = Color.LightGreen;
@@ -537,6 +511,8 @@ namespace PacketSend
 
         private void btnRunFile_Click(object sender, EventArgs e)
         {
+            UpdateGranular();
+
             int file_number = GetFileNumber(sender);
 
             if (file_number == -1) return;
@@ -544,29 +520,6 @@ namespace PacketSend
             if (WiresharkFiles[file_number] == null) return;
 
             WiresharkFile.StopRunningAllFiles = false;
-
-            WiresharkFile.RunSpeeds run_speed = WiresharkFile.RunSpeeds.Original;
-
-            if (rbOriginal.Checked)
-            {
-                run_speed = WiresharkFile.RunSpeeds.Original;
-            }
-            else if (rb100.Checked)
-            {
-                run_speed = WiresharkFile.RunSpeeds.s100;
-            }
-            else if (rb250.Checked)
-            {
-                run_speed = WiresharkFile.RunSpeeds.s250;
-            }
-            else if (rb500.Checked)
-            {
-                run_speed = WiresharkFile.RunSpeeds.s500;
-            }
-            else if (rb1000.Checked)
-            {
-                run_speed = WiresharkFile.RunSpeeds.s1000;
-            }
 
             string info_file_tb_name = "tbFile1";
 
@@ -606,53 +559,47 @@ namespace PacketSend
 
                     Application.DoEvents();
 
-                    if (run_speed == WiresharkFile.RunSpeeds.Original)
+                    if (rbOriginal.Checked)
                     {
-                        if (ckbCleanMode.Checked)
+                        WiresharkFiles[file_number].RunFile();
+                    }
+                    else if (rbGranular.Checked)
+                    {
+                        if (ckbBufferSend.Checked)
                         {
-                            WiresharkFiles[file_number].RunWithStopFeature(true);
+                            WiresharkFiles[file_number].RunFileWithSpeed();
                         }
                         else
                         {
-                            WiresharkFiles[file_number].RunFile();
+                            WiresharkFiles[file_number].RunWithStopFeature(false);
                         }
                     }
                     else
                     {
-                        if (ckbCleanMode.Checked)
-                        {
-                            WiresharkFiles[file_number].RunWithStopFeature(true);
-                        }
-                        else
-                        {
-                            WiresharkFiles[file_number].RunFileWithSpeed(run_speed);
-                        }
+                        WiresharkFiles[file_number].RunWithStopFeature(true);
                     }
                 }
             }
             else
             {
-                if (run_speed == WiresharkFile.RunSpeeds.Original)
+                if (rbOriginal.Checked)
                 {
-                    if (ckbCleanMode.Checked)
+                    WiresharkFiles[file_number].RunFile();
+                }
+                else if (rbGranular.Checked)
+                {
+                    if (ckbBufferSend.Checked)
                     {
-                        WiresharkFiles[file_number].RunWithStopFeature(true);
+                        WiresharkFiles[file_number].RunFileWithSpeed();
                     }
                     else
                     {
-                        WiresharkFiles[file_number].RunFile();
+                        WiresharkFiles[file_number].RunWithStopFeature(false);
                     }
                 }
                 else
                 {
-                    if (ckbCleanMode.Checked)
-                    {
-                        WiresharkFiles[file_number].RunWithStopFeature(true);
-                    }
-                    else
-                    {
-                        WiresharkFiles[file_number].RunFileWithSpeed(run_speed);
-                    }
+                    WiresharkFiles[file_number].RunWithStopFeature(true);
                 }
             }
 
@@ -697,30 +644,30 @@ namespace PacketSend
 
                 string interval = "Original";
 
-                if (rb100.Checked)
-                {
-                    interval = "100";
-                }
-                else if (rb250.Checked)
-                {
-                    interval = "250";
-                }
-                else if (rb500.Checked)
-                {
-                    interval = "500";
-                }
-                else if (rb1000.Checked)
-                {
-                    interval = "1000";
-                }
-                else if (rbZero.Checked)
-                {
-                    interval = "Zero";
-                }
-                else
-                {
-                    interval = "Original";
-                }
+                //if (rb100.Checked)
+                //{
+                //    interval = "100";
+                //}
+                //else if (rb250.Checked)
+                //{
+                //    interval = "250";
+                //}
+                //else if (rb500.Checked)
+                //{
+                //    interval = "500";
+                //}
+                //else if (rb1000.Checked)
+                //{
+                //    interval = "1000";
+                //}
+                //else if (rbZero.Checked)
+                //{
+                //    interval = "Zero";
+                //}
+                //else
+                //{
+                //    interval = "Original";
+                //}
 
                 xml_writer.WriteString(interval);
                 xml_writer.WriteEndElement();
@@ -817,8 +764,6 @@ namespace PacketSend
 
         private void btnNewConfig_Click(object sender, EventArgs e)
         {
-            rbOriginal.Checked = true;
-
             WiresharkFiles.Clear();
 
             WiresharkFiles.Add(null);
@@ -857,29 +802,33 @@ namespace PacketSend
             tbFileInfoNumberOfPackets.Text = WiresharkFiles[file_number].PacketCount + " (SIP: " + WiresharkFiles[file_number].SIP_Packets + "  ::  RTP: " + WiresharkFiles[file_number].RTP_Packets + ")";
             tbFileInfoSIPGateway.Text = WiresharkFiles[file_number].SIPGateway.ToString();
 
-            if(ckbCleanMode.Checked)
+            UpdateEstTime();
+        }
+
+        private void UpdateGranular()
+        {
+            if (rbGranular.Checked)
             {
-                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[file_number].DetailedPackets * WiresharkFile.StopFeatureTimeInterval) / 1000.0f);
+                Granular = 1;
+
+                if (rbUS.Checked)
+                {
+                    Granular = 1;
+                }
+                else if (rbMS.Checked)
+                {
+                    Granular = 1000;
+                }
+                else if (rbSec.Checked)
+                {
+                    Granular = 1000000;
+                }
+
+                WiresharkFile.StopFeatureTimeIntervalMicroSeconds = (long)ndInterval.Value * Granular;
             }
-            else if(rbOriginal.Checked)
+            else
             {
-                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime(WiresharkFiles[file_number].FileEstTime);
-            }
-            else if(rb100.Checked)
-            {
-                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[file_number].PacketCount * 100) / 1000000.0f);
-            }
-            else if (rb250.Checked)
-            {
-                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[file_number].PacketCount * 250) / 1000000.0f);
-            }
-            else if (rb500.Checked)
-            {
-                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[file_number].PacketCount * 500) / 1000000.0f);
-            }
-            else if (rb1000.Checked)
-            {
-                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[file_number].PacketCount * 1000) / 1000000.0f);
+                WiresharkFile.StopFeatureTimeIntervalMicroSeconds = 50000;
             }
         }
 
@@ -889,32 +838,17 @@ namespace PacketSend
 
             if (WiresharkFiles[CurrentFileNumber] == null) return;
 
-            tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[CurrentFileNumber].PacketCount * (int)ndMSOverride.Value) / 1000.0f);
-            return;
-
-            if (ckbCleanMode.Checked)
+            if (!rbClean.Checked)
             {
-                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[CurrentFileNumber].DetailedPackets * WiresharkFile.StopFeatureTimeInterval) / 1000.0f);
+                UpdateGranular();
+                
+                tbFileInfoEstTime.Text = Common.ConvertNanoSecondsToReadableTime((WiresharkFiles[CurrentFileNumber].PacketCount * ((int)ndInterval.Value * Granular)));
+                rbClean.Text = "Clean Mode INACTIVE";
             }
-            else if (rbOriginal.Checked)
+            else
             {
-                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime(WiresharkFiles[CurrentFileNumber].FileEstTime);
-            }
-            else if (rb100.Checked)
-            {
-                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[CurrentFileNumber].PacketCount * 100) / 1000000.0f);
-            }
-            else if (rb250.Checked)
-            {
-                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[CurrentFileNumber].PacketCount * 250) / 1000000.0f);
-            }
-            else if (rb500.Checked)
-            {
-                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[CurrentFileNumber].PacketCount * 500) / 1000000.0f);
-            }
-            else if (rb1000.Checked)
-            {
-                tbFileInfoEstTime.Text = Common.ConvertSecondsToReadableTime((WiresharkFiles[CurrentFileNumber].PacketCount * 1000) / 1000000.0f);
+                tbFileInfoEstTime.Text = Common.ConvertNanoSecondsToReadableTime(WiresharkFiles[CurrentFileNumber].PacketCount * 50000000);
+                rbClean.Text = "Clean Mode (Only SIP && RTP - 50 ms interval)";
             }
         }
 
@@ -941,35 +875,6 @@ namespace PacketSend
         private void ckbCleanMode_CheckedChanged(object sender, EventArgs e)
         {
             UpdateEstTime();
-
-            if(ckbCleanMode.Checked)
-            {
-                rb100.Enabled = false;
-                rb1000.Enabled = false;
-                rb250.Enabled = false;
-                rb500.Enabled = false;
-                rbOriginal.Enabled = false;
-                rbZero.Enabled = false;
-
-                rb10ms.Enabled = true;
-                rb100ms.Enabled = true;
-                rb25ms.Enabled = true;
-                rb50ms.Enabled = true;
-            }
-            else
-            {
-                rb100.Enabled = true;
-                rb1000.Enabled = true;
-                rb250.Enabled = true;
-                rb500.Enabled = true;
-                rbOriginal.Enabled = true;
-                rbZero.Enabled = true;
-
-                rb10ms.Enabled = false;
-                rb100ms.Enabled = false;
-                rb25ms.Enabled = false;
-                rb50ms.Enabled = false;
-            }
         }
 
         private void btnCopySIPGateway_Click(object sender, EventArgs e)
@@ -980,38 +885,41 @@ namespace PacketSend
 
         private void rbCleanModeTimeInterval_Click(object sender, EventArgs e)
         {
-            WiresharkFile.StopFeatureTimeInterval = (int)ndMSOverride.Value;
-            ckbCleanMode.Text = "Clean Mode (Only SIP && RTP - " + WiresharkFile.StopFeatureTimeInterval + " ms interval)";
-            UpdateEstTime();
-
-            return;
-
-            if (rb10ms.Checked)
-            {
-                WiresharkFile.StopFeatureTimeInterval = 1;
-            }
-            else if (rb25ms.Checked)
-            {
-                WiresharkFile.StopFeatureTimeInterval = 25;
-            }
-            else if (rb50ms.Checked)
-            {
-                WiresharkFile.StopFeatureTimeInterval = 50;
-            }
-            else if (rb100ms.Checked)
-            {
-                WiresharkFile.StopFeatureTimeInterval = 100;
-            }
-
-            ckbCleanMode.Text = "Clean Mode (Only SIP && RTP - " + WiresharkFile.StopFeatureTimeInterval + " ms interval)";
+            WiresharkFile.StopFeatureTimeIntervalMicroSeconds = 50000;
             UpdateEstTime();
         }
 
         private void ndMSOverride_ValueChanged(object sender, EventArgs e)
         {
-            WiresharkFile.StopFeatureTimeInterval = (int)ndMSOverride.Value;
-            ckbCleanMode.Text = "Clean Mode (Only SIP && RTP - " + WiresharkFile.StopFeatureTimeInterval + " ms interval)";
+            UpdateGranular();
+            WiresharkFile.StopFeatureTimeIntervalMicroSeconds = (long)ndInterval.Value / Granular;
             UpdateEstTime();
+        }
+
+        private void rbSpeed_Click(object sender, EventArgs e)
+        {
+            UpdateGranular();
+            UpdateEstTime();
+        }
+
+        private void rbClean_Click(object sender, EventArgs e)
+        {
+            UpdateEstTime();
+        }
+
+        private void rbGranular_Click(object sender, EventArgs e)
+        {
+            UpdateEstTime();
+        }
+
+        private void rbOriginal_Click(object sender, EventArgs e)
+        {
+            UpdateEstTime();
+        }
+
+        private void rbClean_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateGranular();
         }
     }
 }

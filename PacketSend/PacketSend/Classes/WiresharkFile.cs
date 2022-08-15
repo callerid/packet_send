@@ -63,16 +63,6 @@ namespace PacketSend.Classes
             SelectedNetworkAdapter = NetworkAdapters[index];
         }
 
-        public enum RunSpeeds
-        {
-            Original,
-            Zero,
-            s100,
-            s250,
-            s500,
-            s1000
-        }
-
         // Wireshark File Instances
         public string FileName = "";
         public OfflinePacketDevice OfflineDevice;
@@ -80,7 +70,6 @@ namespace PacketSend.Classes
         private int TimePacketCount = 0;
         public int RunningSpeedPacketCount = 0;
         private List<Packet> AlteredPackets = new List<Packet>();
-        public RunSpeeds RunSpeed = RunSpeeds.Original;
         public int RTP_Packets = 0;
         public int SIP_Packets = 0;
         public long FileSizeKB = 0;
@@ -108,7 +97,7 @@ namespace PacketSend.Classes
         public static bool StopRunningAllFiles = false;
         public int PacketsSentBeforeStop = 0;
         public int PacketsNotSentAfterStop = 0;
-        public static int StopFeatureTimeInterval = 100; // Speed of detailed mode
+        public static long StopFeatureTimeIntervalMicroSeconds = 50000; // 50ms
         public int DetailedPackets = 0;
 
         public WiresharkFile(string filepath)
@@ -152,44 +141,18 @@ namespace PacketSend.Classes
             Common.ConsoleWriteLine(ConsoleText, "File Loaded: " + FileName.Substring(FileName.LastIndexOf("\\") + 1) + "\n   - SIP Packets = " + SIP_Packets + "\n   - RTP Packets = " + RTP_Packets);
         }
 
-        public void RunFileWithSpeed(RunSpeeds run_speed)
+        public void RunFileWithSpeed()
         {
-            RunWithStopFeature();
-            return;
+            if (MessageBox.Show("This will freeze program while running. Continue?", "Run File", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No) return;
 
             if (string.IsNullOrEmpty(FileName)) return;
-            if (run_speed == RunSpeeds.Original) return;
             if (PacketCount == 0 || SelectedNetworkAdapter == null) return;
             
-            int time_interval = 100;
-
-            switch(run_speed)
-            {
-                case RunSpeeds.Original:
-                case RunSpeeds.s100:
-                    time_interval = 100;
-                    break;
-                case RunSpeeds.Zero:
-                    time_interval = 1;
-                    break;
-                case RunSpeeds.s250:
-                    time_interval = 250;
-                    break;
-                case RunSpeeds.s500:
-                    time_interval = 500;
-                    break;
-                case RunSpeeds.s1000:
-                    time_interval = 1000;
-                    break;
-                default:
-                    time_interval = 100;
-                    break;
-            }
-
-            DateTime time_stamp = DateTime.Now;
-
             // Open the capture file
             OfflinePacketDevice selectedInputDevice = new OfflinePacketDevice(FileName);
+
+            DateTime time_stamp = DateTime.Now;
+            double ms = (StopFeatureTimeIntervalMicroSeconds * 0.001);
 
             using (PacketCommunicator inputCommunicator =
                 selectedInputDevice.Open(65536, // portion of the packet to capture
@@ -216,7 +179,7 @@ namespace PacketSend.Classes
 
                         try
                         {
-                            if(ipv4_layer.Length < 1) // Catch null Length
+                            if (ipv4_layer.Length < 1) // Catch null Length
                             {
                                 // Do Nothing
                             }
@@ -228,7 +191,7 @@ namespace PacketSend.Classes
 
                         List<ILayer> layers = new List<ILayer>();
 
-                        if(IsRTP(packet))
+                        if (IsRTP(packet))
                         {
                             if (ethernet_layer != null) layers.Add(ethernet_layer);
                             if (ipv4_layer != null) layers.Add(ipv4_layer);
@@ -245,8 +208,9 @@ namespace PacketSend.Classes
                         }
 
                         PacketBuilder builder = new PacketBuilder(layers);
-                        
-                        Packet altered_packet = builder.Build(time_stamp.AddMilliseconds((packet_count * time_interval) / 1000));
+                        time_stamp = time_stamp.AddMilliseconds(ms);
+
+                        Packet altered_packet = builder.Build(time_stamp);
                         ProcessAlteredPacket(altered_packet);
 
                         packet_count++;
@@ -255,7 +219,7 @@ namespace PacketSend.Classes
                     using (PacketSendBuffer sendBuffer = new PacketSendBuffer(4294967295))
                     {
 
-                        foreach(Packet p in AlteredPackets)
+                        foreach (Packet p in AlteredPackets)
                         {
                             sendBuffer.Enqueue(p);
                         }
@@ -263,11 +227,14 @@ namespace PacketSend.Classes
                         // Transmit the queue
                         Stopwatch stopwatch = new Stopwatch();
                         stopwatch.Start();
+
                         long startTimeMs = stopwatch.ElapsedMilliseconds;
                         Common.ConsoleWriteLine(ConsoleText);
                         Common.ConsoleWriteLine(ConsoleText, "File:\n   " + FileName.Substring(FileName.LastIndexOf("\\") + 1));
                         Common.ConsoleWriteLine(ConsoleText, "   Start Time: " + startTimeMs);
+
                         outputCommunicator.Transmit(sendBuffer, true);
+
                         long endTimeMs = stopwatch.ElapsedMilliseconds;
                         Common.ConsoleWriteLine(ConsoleText, "   End Time: " + endTimeMs);
                         long elapsedTimeMs = endTimeMs - startTimeMs;
@@ -290,8 +257,7 @@ namespace PacketSend.Classes
 
         public void RunFile()
         {
-            RunWithStopFeature();
-            return;
+            if (MessageBox.Show("This will freeze program while running. Continue?", "Run File", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No) return;
 
             if (string.IsNullOrEmpty(FileName)) return;
 
@@ -795,14 +761,14 @@ namespace PacketSend.Classes
 
                         PacketBuilder builder = new PacketBuilder(layers);
 
-                        Packet altered_packet = builder.Build(StartTimeStamp.AddMilliseconds(packet_count * StopFeatureTimeInterval));
+                        Packet altered_packet = builder.Build(StartTimeStamp.AddMilliseconds(StopFeatureTimeIntervalMicroSeconds * 0.001));
                         ProcessAlteredPacket(altered_packet);
 
                         packet_count++;
                     }
 
                     Common.ConsoleWriteLine(ConsoleText, "Sending packets. Total to packets to send: " + AlteredPackets.Count);
-                    Common.WaitFor(50);
+                    Application.DoEvents();
 
                     if (StopRunningAllFiles)
                     {
@@ -871,7 +837,7 @@ namespace PacketSend.Classes
                         PacketsSentBeforeStop++;
 
                         // Wait before sending next packet
-                        Common.WaitFor(StopFeatureTimeInterval);
+                        Common.WaitForNanoSeconds(StopFeatureTimeIntervalMicroSeconds * 1000);
 
                     }
 

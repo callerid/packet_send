@@ -55,13 +55,6 @@
             this.ckbNext4 = new System.Windows.Forms.CheckBox();
             this.ckbNext5 = new System.Windows.Forms.CheckBox();
             this.ckbNext6 = new System.Windows.Forms.CheckBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
             this.btnLoadConfig = new System.Windows.Forms.Button();
             this.btnSaveConfig = new System.Windows.Forms.Button();
             this.btnSaveAsConfig = new System.Windows.Forms.Button();
@@ -80,13 +73,6 @@
             this.tbPacketCount4 = new System.Windows.Forms.TextBox();
             this.tbPacketCount5 = new System.Windows.Forms.TextBox();
             this.tbPacketCount6 = new System.Windows.Forms.TextBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.rb1000 = new System.Windows.Forms.RadioButton();
-            this.rb500 = new System.Windows.Forms.RadioButton();
-            this.rb250 = new System.Windows.Forms.RadioButton();
-            this.rb100 = new System.Windows.Forms.RadioButton();
-            this.rbZero = new System.Windows.Forms.RadioButton();
-            this.rbOriginal = new System.Windows.Forms.RadioButton();
             this.rtbConsole = new System.Windows.Forms.RichTextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.btnClearConsole = new System.Windows.Forms.Button();
@@ -103,7 +89,6 @@
             this.label18 = new System.Windows.Forms.Label();
             this.tbFileInfoEstTime = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
-            this.ckbCleanMode = new System.Windows.Forms.CheckBox();
             this.rtbSIPConsole = new System.Windows.Forms.RichTextBox();
             this.lbVersion = new System.Windows.Forms.Label();
             this.btnOpenFile1 = new System.Windows.Forms.Button();
@@ -116,18 +101,21 @@
             this.label4 = new System.Windows.Forms.Label();
             this.btnCopySIPGateway = new System.Windows.Forms.Button();
             this.lbLastCopy = new System.Windows.Forms.Label();
-            this.rb100ms = new System.Windows.Forms.RadioButton();
-            this.rb50ms = new System.Windows.Forms.RadioButton();
-            this.rb25ms = new System.Windows.Forms.RadioButton();
-            this.rb10ms = new System.Windows.Forms.RadioButton();
             this.ckbLoopSend = new System.Windows.Forms.CheckBox();
             this.ndLoops = new System.Windows.Forms.NumericUpDown();
             this.lbCurrentLoop = new System.Windows.Forms.Label();
-            this.ndMSOverride = new System.Windows.Forms.NumericUpDown();
-            this.label20 = new System.Windows.Forms.Label();
-            this.panel1.SuspendLayout();
+            this.ndInterval = new System.Windows.Forms.NumericUpDown();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.rbSec = new System.Windows.Forms.RadioButton();
+            this.rbMS = new System.Windows.Forms.RadioButton();
+            this.rbUS = new System.Windows.Forms.RadioButton();
+            this.rbClean = new System.Windows.Forms.RadioButton();
+            this.rbGranular = new System.Windows.Forms.RadioButton();
+            this.rbOriginal = new System.Windows.Forms.RadioButton();
+            this.ckbBufferSend = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.ndLoops)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ndMSOverride)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ndInterval)).BeginInit();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnRunFile1
@@ -398,86 +386,9 @@
             this.ckbNext6.UseVisualStyleBackColor = true;
             this.ckbNext6.Click += new System.EventHandler(this.ChangesMade);
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(18, 114);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(42, 13);
-            this.label5.TabIndex = 46;
-            this.label5.Text = "Original";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label5.Visible = false;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(66, 114);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(29, 13);
-            this.label6.TabIndex = 47;
-            this.label6.Text = "Zero";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label6.Visible = false;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(101, 114);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(25, 13);
-            this.label7.TabIndex = 48;
-            this.label7.Text = "100";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label7.Visible = false;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(132, 114);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(25, 13);
-            this.label8.TabIndex = 49;
-            this.label8.Text = "250";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label8.Visible = false;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(163, 114);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(25, 13);
-            this.label9.TabIndex = 50;
-            this.label9.Text = "500";
-            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label9.Visible = false;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(194, 114);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(31, 13);
-            this.label10.TabIndex = 51;
-            this.label10.Text = "1000";
-            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label10.Visible = false;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(49, 93);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(153, 13);
-            this.label11.TabIndex = 52;
-            this.label11.Text = "Time Interval in Micro Seconds";
-            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label11.Visible = false;
-            // 
             // btnLoadConfig
             // 
-            this.btnLoadConfig.Location = new System.Drawing.Point(68, 53);
+            this.btnLoadConfig.Location = new System.Drawing.Point(68, 51);
             this.btnLoadConfig.Name = "btnLoadConfig";
             this.btnLoadConfig.Size = new System.Drawing.Size(47, 23);
             this.btnLoadConfig.TabIndex = 59;
@@ -487,7 +398,7 @@
             // 
             // btnSaveConfig
             // 
-            this.btnSaveConfig.Location = new System.Drawing.Point(121, 53);
+            this.btnSaveConfig.Location = new System.Drawing.Point(121, 51);
             this.btnSaveConfig.Name = "btnSaveConfig";
             this.btnSaveConfig.Size = new System.Drawing.Size(47, 23);
             this.btnSaveConfig.TabIndex = 60;
@@ -497,7 +408,7 @@
             // 
             // btnSaveAsConfig
             // 
-            this.btnSaveAsConfig.Location = new System.Drawing.Point(174, 53);
+            this.btnSaveAsConfig.Location = new System.Drawing.Point(174, 51);
             this.btnSaveAsConfig.Name = "btnSaveAsConfig";
             this.btnSaveAsConfig.Size = new System.Drawing.Size(62, 23);
             this.btnSaveAsConfig.TabIndex = 61;
@@ -541,7 +452,7 @@
             // 
             this.cbNetworkAdapters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbNetworkAdapters.FormattingEnabled = true;
-            this.cbNetworkAdapters.Location = new System.Drawing.Point(470, 93);
+            this.cbNetworkAdapters.Location = new System.Drawing.Point(453, 55);
             this.cbNetworkAdapters.Name = "cbNetworkAdapters";
             this.cbNetworkAdapters.Size = new System.Drawing.Size(149, 21);
             this.cbNetworkAdapters.TabIndex = 65;
@@ -550,7 +461,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(377, 96);
+            this.label15.Location = new System.Drawing.Point(360, 58);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(87, 13);
             this.label15.TabIndex = 66;
@@ -647,87 +558,6 @@
             this.tbPacketCount6.TabIndex = 76;
             this.tbPacketCount6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.rb1000);
-            this.panel1.Controls.Add(this.rb500);
-            this.panel1.Controls.Add(this.rb250);
-            this.panel1.Controls.Add(this.rb100);
-            this.panel1.Controls.Add(this.rbZero);
-            this.panel1.Controls.Add(this.rbOriginal);
-            this.panel1.Location = new System.Drawing.Point(6, 136);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(235, 26);
-            this.panel1.TabIndex = 77;
-            // 
-            // rb1000
-            // 
-            this.rb1000.AutoSize = true;
-            this.rb1000.Location = new System.Drawing.Point(198, 7);
-            this.rb1000.Name = "rb1000";
-            this.rb1000.Size = new System.Drawing.Size(14, 13);
-            this.rb1000.TabIndex = 83;
-            this.rb1000.UseVisualStyleBackColor = true;
-            this.rb1000.Visible = false;
-            this.rb1000.Click += new System.EventHandler(this.ChangesMade);
-            // 
-            // rb500
-            // 
-            this.rb500.AutoSize = true;
-            this.rb500.Location = new System.Drawing.Point(163, 7);
-            this.rb500.Name = "rb500";
-            this.rb500.Size = new System.Drawing.Size(14, 13);
-            this.rb500.TabIndex = 82;
-            this.rb500.UseVisualStyleBackColor = true;
-            this.rb500.Visible = false;
-            this.rb500.Click += new System.EventHandler(this.ChangesMade);
-            // 
-            // rb250
-            // 
-            this.rb250.AutoSize = true;
-            this.rb250.Location = new System.Drawing.Point(132, 7);
-            this.rb250.Name = "rb250";
-            this.rb250.Size = new System.Drawing.Size(14, 13);
-            this.rb250.TabIndex = 81;
-            this.rb250.UseVisualStyleBackColor = true;
-            this.rb250.Visible = false;
-            this.rb250.Click += new System.EventHandler(this.ChangesMade);
-            // 
-            // rb100
-            // 
-            this.rb100.AutoSize = true;
-            this.rb100.Location = new System.Drawing.Point(102, 7);
-            this.rb100.Name = "rb100";
-            this.rb100.Size = new System.Drawing.Size(14, 13);
-            this.rb100.TabIndex = 80;
-            this.rb100.UseVisualStyleBackColor = true;
-            this.rb100.Visible = false;
-            this.rb100.Click += new System.EventHandler(this.ChangesMade);
-            // 
-            // rbZero
-            // 
-            this.rbZero.AutoSize = true;
-            this.rbZero.Location = new System.Drawing.Point(66, 7);
-            this.rbZero.Name = "rbZero";
-            this.rbZero.Size = new System.Drawing.Size(14, 13);
-            this.rbZero.TabIndex = 79;
-            this.rbZero.UseVisualStyleBackColor = true;
-            this.rbZero.Visible = false;
-            this.rbZero.Click += new System.EventHandler(this.ChangesMade);
-            // 
-            // rbOriginal
-            // 
-            this.rbOriginal.AutoSize = true;
-            this.rbOriginal.Checked = true;
-            this.rbOriginal.Location = new System.Drawing.Point(24, 7);
-            this.rbOriginal.Name = "rbOriginal";
-            this.rbOriginal.Size = new System.Drawing.Size(14, 13);
-            this.rbOriginal.TabIndex = 78;
-            this.rbOriginal.TabStop = true;
-            this.rbOriginal.UseVisualStyleBackColor = true;
-            this.rbOriginal.Visible = false;
-            this.rbOriginal.Click += new System.EventHandler(this.ChangesMade);
-            // 
             // rtbConsole
             // 
             this.rtbConsole.Location = new System.Drawing.Point(625, 93);
@@ -760,7 +590,7 @@
             // 
             // btnNewConfig
             // 
-            this.btnNewConfig.Location = new System.Drawing.Point(15, 53);
+            this.btnNewConfig.Location = new System.Drawing.Point(15, 51);
             this.btnNewConfig.Name = "btnNewConfig";
             this.btnNewConfig.Size = new System.Drawing.Size(47, 23);
             this.btnNewConfig.TabIndex = 81;
@@ -879,17 +709,6 @@
             this.label19.Text = "Est. Time:";
             this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // ckbCleanMode
-            // 
-            this.ckbCleanMode.AutoSize = true;
-            this.ckbCleanMode.Location = new System.Drawing.Point(247, 142);
-            this.ckbCleanMode.Name = "ckbCleanMode";
-            this.ckbCleanMode.Size = new System.Drawing.Size(222, 17);
-            this.ckbCleanMode.TabIndex = 94;
-            this.ckbCleanMode.Text = "Clean Mode (Only SIP && RTP - ttt interval)";
-            this.ckbCleanMode.UseVisualStyleBackColor = true;
-            this.ckbCleanMode.CheckedChanged += new System.EventHandler(this.ckbCleanMode_CheckedChanged);
-            // 
             // rtbSIPConsole
             // 
             this.rtbSIPConsole.Location = new System.Drawing.Point(625, 349);
@@ -1007,60 +826,6 @@
             this.lbLastCopy.Text = "Last Copy: Not Copied Yet";
             this.lbLastCopy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // rb100ms
-            // 
-            this.rb100ms.AutoSize = true;
-            this.rb100ms.Enabled = false;
-            this.rb100ms.Location = new System.Drawing.Point(464, 123);
-            this.rb100ms.Name = "rb100ms";
-            this.rb100ms.Size = new System.Drawing.Size(59, 17);
-            this.rb100ms.TabIndex = 87;
-            this.rb100ms.Text = "100 ms";
-            this.rb100ms.UseVisualStyleBackColor = true;
-            this.rb100ms.Visible = false;
-            this.rb100ms.Click += new System.EventHandler(this.rbCleanModeTimeInterval_Click);
-            // 
-            // rb50ms
-            // 
-            this.rb50ms.AutoSize = true;
-            this.rb50ms.Checked = true;
-            this.rb50ms.Enabled = false;
-            this.rb50ms.Location = new System.Drawing.Point(405, 123);
-            this.rb50ms.Name = "rb50ms";
-            this.rb50ms.Size = new System.Drawing.Size(53, 17);
-            this.rb50ms.TabIndex = 86;
-            this.rb50ms.TabStop = true;
-            this.rb50ms.Text = "50 ms";
-            this.rb50ms.UseVisualStyleBackColor = true;
-            this.rb50ms.Visible = false;
-            this.rb50ms.Click += new System.EventHandler(this.rbCleanModeTimeInterval_Click);
-            // 
-            // rb25ms
-            // 
-            this.rb25ms.AutoSize = true;
-            this.rb25ms.Enabled = false;
-            this.rb25ms.Location = new System.Drawing.Point(346, 123);
-            this.rb25ms.Name = "rb25ms";
-            this.rb25ms.Size = new System.Drawing.Size(53, 17);
-            this.rb25ms.TabIndex = 85;
-            this.rb25ms.Text = "25 ms";
-            this.rb25ms.UseVisualStyleBackColor = true;
-            this.rb25ms.Visible = false;
-            this.rb25ms.Click += new System.EventHandler(this.rbCleanModeTimeInterval_Click);
-            // 
-            // rb10ms
-            // 
-            this.rb10ms.AutoSize = true;
-            this.rb10ms.Enabled = false;
-            this.rb10ms.Location = new System.Drawing.Point(287, 123);
-            this.rb10ms.Name = "rb10ms";
-            this.rb10ms.Size = new System.Drawing.Size(53, 17);
-            this.rb10ms.TabIndex = 84;
-            this.rb10ms.Text = "10 ms";
-            this.rb10ms.UseVisualStyleBackColor = true;
-            this.rb10ms.Visible = false;
-            this.rb10ms.Click += new System.EventHandler(this.rbCleanModeTimeInterval_Click);
-            // 
             // ckbLoopSend
             // 
             this.ckbLoopSend.AutoSize = true;
@@ -1098,56 +863,139 @@
             this.lbCurrentLoop.TabIndex = 109;
             this.lbCurrentLoop.Text = "Not Running";
             // 
-            // ndMSOverride
+            // ndInterval
             // 
-            this.ndMSOverride.Location = new System.Drawing.Point(281, 94);
-            this.ndMSOverride.Maximum = new decimal(new int[] {
-            1000,
+            this.ndInterval.Location = new System.Drawing.Point(129, 110);
+            this.ndInterval.Maximum = new decimal(new int[] {
+            1000000,
             0,
             0,
             0});
-            this.ndMSOverride.Minimum = new decimal(new int[] {
+            this.ndInterval.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.ndMSOverride.Name = "ndMSOverride";
-            this.ndMSOverride.Size = new System.Drawing.Size(68, 20);
-            this.ndMSOverride.TabIndex = 110;
-            this.ndMSOverride.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ndMSOverride.Value = new decimal(new int[] {
+            this.ndInterval.Name = "ndInterval";
+            this.ndInterval.Size = new System.Drawing.Size(99, 20);
+            this.ndInterval.TabIndex = 110;
+            this.ndInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ndInterval.Value = new decimal(new int[] {
             50,
             0,
             0,
             0});
-            this.ndMSOverride.ValueChanged += new System.EventHandler(this.ndMSOverride_ValueChanged);
+            this.ndInterval.ValueChanged += new System.EventHandler(this.ndMSOverride_ValueChanged);
             // 
-            // label20
+            // panel2
             // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(206, 96);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(69, 13);
-            this.label20.TabIndex = 111;
-            this.label20.Text = "Interval in ms";
-            this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.panel2.Controls.Add(this.rbSec);
+            this.panel2.Controls.Add(this.rbMS);
+            this.panel2.Controls.Add(this.rbUS);
+            this.panel2.Location = new System.Drawing.Point(234, 109);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(145, 24);
+            this.panel2.TabIndex = 113;
+            // 
+            // rbSec
+            // 
+            this.rbSec.AutoSize = true;
+            this.rbSec.Location = new System.Drawing.Point(94, 3);
+            this.rbSec.Name = "rbSec";
+            this.rbSec.Size = new System.Drawing.Size(42, 17);
+            this.rbSec.TabIndex = 117;
+            this.rbSec.Text = "sec";
+            this.rbSec.UseVisualStyleBackColor = true;
+            this.rbSec.Click += new System.EventHandler(this.rbSpeed_Click);
+            // 
+            // rbMS
+            // 
+            this.rbMS.AutoSize = true;
+            this.rbMS.Checked = true;
+            this.rbMS.Location = new System.Drawing.Point(50, 3);
+            this.rbMS.Name = "rbMS";
+            this.rbMS.Size = new System.Drawing.Size(38, 17);
+            this.rbMS.TabIndex = 116;
+            this.rbMS.TabStop = true;
+            this.rbMS.Text = "ms";
+            this.rbMS.UseVisualStyleBackColor = true;
+            this.rbMS.Click += new System.EventHandler(this.rbSpeed_Click);
+            // 
+            // rbUS
+            // 
+            this.rbUS.AutoSize = true;
+            this.rbUS.Location = new System.Drawing.Point(8, 3);
+            this.rbUS.Name = "rbUS";
+            this.rbUS.Size = new System.Drawing.Size(36, 17);
+            this.rbUS.TabIndex = 115;
+            this.rbUS.Text = "us";
+            this.rbUS.UseVisualStyleBackColor = true;
+            this.rbUS.Click += new System.EventHandler(this.rbSpeed_Click);
+            // 
+            // rbClean
+            // 
+            this.rbClean.AutoSize = true;
+            this.rbClean.Location = new System.Drawing.Point(28, 139);
+            this.rbClean.Name = "rbClean";
+            this.rbClean.Size = new System.Drawing.Size(237, 17);
+            this.rbClean.TabIndex = 116;
+            this.rbClean.Text = "Clean Mode (Only SIP && RTP - 50ms interval)";
+            this.rbClean.UseVisualStyleBackColor = true;
+            this.rbClean.CheckedChanged += new System.EventHandler(this.rbClean_CheckedChanged);
+            this.rbClean.Click += new System.EventHandler(this.rbClean_Click);
+            // 
+            // rbGranular
+            // 
+            this.rbGranular.AutoSize = true;
+            this.rbGranular.Checked = true;
+            this.rbGranular.Location = new System.Drawing.Point(28, 110);
+            this.rbGranular.Name = "rbGranular";
+            this.rbGranular.Size = new System.Drawing.Size(95, 17);
+            this.rbGranular.TabIndex = 117;
+            this.rbGranular.TabStop = true;
+            this.rbGranular.Text = "Granular Mode";
+            this.rbGranular.UseVisualStyleBackColor = true;
+            this.rbGranular.Click += new System.EventHandler(this.rbGranular_Click);
+            // 
+            // rbOriginal
+            // 
+            this.rbOriginal.AutoSize = true;
+            this.rbOriginal.Location = new System.Drawing.Point(28, 83);
+            this.rbOriginal.Name = "rbOriginal";
+            this.rbOriginal.Size = new System.Drawing.Size(60, 17);
+            this.rbOriginal.TabIndex = 118;
+            this.rbOriginal.Text = "Original";
+            this.rbOriginal.UseVisualStyleBackColor = true;
+            this.rbOriginal.Click += new System.EventHandler(this.rbOriginal_Click);
+            // 
+            // ckbBufferSend
+            // 
+            this.ckbBufferSend.AutoSize = true;
+            this.ckbBufferSend.Checked = true;
+            this.ckbBufferSend.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ckbBufferSend.Location = new System.Drawing.Point(385, 113);
+            this.ckbBufferSend.Name = "ckbBufferSend";
+            this.ckbBufferSend.Size = new System.Drawing.Size(197, 17);
+            this.ckbBufferSend.TabIndex = 119;
+            this.ckbBufferSend.Text = "Use Buffer Send for better Accuracy";
+            this.ckbBufferSend.UseVisualStyleBackColor = true;
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1067, 565);
-            this.Controls.Add(this.label20);
-            this.Controls.Add(this.ndMSOverride);
+            this.ClientSize = new System.Drawing.Size(1069, 565);
+            this.Controls.Add(this.ckbBufferSend);
+            this.Controls.Add(this.rbOriginal);
+            this.Controls.Add(this.rbGranular);
+            this.Controls.Add(this.rbClean);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.ndInterval);
             this.Controls.Add(this.lbCurrentLoop);
             this.Controls.Add(this.ndLoops);
             this.Controls.Add(this.ckbLoopSend);
-            this.Controls.Add(this.rb100ms);
-            this.Controls.Add(this.rb50ms);
             this.Controls.Add(this.lbLastCopy);
-            this.Controls.Add(this.rb25ms);
             this.Controls.Add(this.btnCopySIPGateway);
-            this.Controls.Add(this.rb10ms);
             this.Controls.Add(this.tbFileInfoSIPGateway);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btnOpenFile6);
@@ -1158,7 +1006,6 @@
             this.Controls.Add(this.btnOpenFile1);
             this.Controls.Add(this.lbVersion);
             this.Controls.Add(this.rtbSIPConsole);
-            this.Controls.Add(this.ckbCleanMode);
             this.Controls.Add(this.tbFileInfoEstTime);
             this.Controls.Add(this.label19);
             this.Controls.Add(this.tbFileInfoNumberOfPackets);
@@ -1175,7 +1022,6 @@
             this.Controls.Add(this.btnClearConsole);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.rtbConsole);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.tbPacketCount6);
             this.Controls.Add(this.tbPacketCount5);
             this.Controls.Add(this.tbPacketCount4);
@@ -1194,13 +1040,6 @@
             this.Controls.Add(this.btnSaveAsConfig);
             this.Controls.Add(this.btnSaveConfig);
             this.Controls.Add(this.btnLoadConfig);
-            this.Controls.Add(this.label11);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.ckbNext6);
             this.Controls.Add(this.ckbNext5);
             this.Controls.Add(this.ckbNext4);
@@ -1232,10 +1071,10 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Packet Send";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ndLoops)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ndMSOverride)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ndInterval)).EndInit();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1270,13 +1109,6 @@
         private System.Windows.Forms.CheckBox ckbNext4;
         private System.Windows.Forms.CheckBox ckbNext5;
         private System.Windows.Forms.CheckBox ckbNext6;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button btnLoadConfig;
         private System.Windows.Forms.Button btnSaveConfig;
         private System.Windows.Forms.Button btnSaveAsConfig;
@@ -1295,14 +1127,6 @@
         private System.Windows.Forms.TextBox tbPacketCount4;
         private System.Windows.Forms.TextBox tbPacketCount5;
         private System.Windows.Forms.TextBox tbPacketCount6;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.RadioButton rb1000;
-        private System.Windows.Forms.RadioButton rb500;
-        private System.Windows.Forms.RadioButton rb250;
-        private System.Windows.Forms.RadioButton rb100;
-        private System.Windows.Forms.RadioButton rbZero;
-        private System.Windows.Forms.RadioButton rbOriginal;
-        private System.Windows.Forms.RichTextBox rtbConsole;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button btnClearConsole;
         private System.Windows.Forms.Button btnNewConfig;
@@ -1318,7 +1142,6 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.TextBox tbFileInfoEstTime;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.CheckBox ckbCleanMode;
         private System.Windows.Forms.RichTextBox rtbSIPConsole;
         private System.Windows.Forms.Label lbVersion;
         private System.Windows.Forms.Button btnOpenFile1;
@@ -1331,15 +1154,19 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnCopySIPGateway;
         private System.Windows.Forms.Label lbLastCopy;
-        private System.Windows.Forms.RadioButton rb100ms;
-        private System.Windows.Forms.RadioButton rb50ms;
-        private System.Windows.Forms.RadioButton rb25ms;
-        private System.Windows.Forms.RadioButton rb10ms;
         private System.Windows.Forms.CheckBox ckbLoopSend;
         private System.Windows.Forms.NumericUpDown ndLoops;
         private System.Windows.Forms.Label lbCurrentLoop;
-        private System.Windows.Forms.NumericUpDown ndMSOverride;
-        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.NumericUpDown ndInterval;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.RadioButton rbSec;
+        private System.Windows.Forms.RadioButton rbMS;
+        private System.Windows.Forms.RadioButton rbUS;
+        private System.Windows.Forms.RadioButton rbClean;
+        private System.Windows.Forms.RadioButton rbGranular;
+        private System.Windows.Forms.RadioButton rbOriginal;
+        public System.Windows.Forms.RichTextBox rtbConsole;
+        private System.Windows.Forms.CheckBox ckbBufferSend;
     }
 }
 
